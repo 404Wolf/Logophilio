@@ -1,0 +1,429 @@
+Microsoft Windows [Version 10.0.22621.1848]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Wolf\Desktop\gpt-cli>python gtp.py
+python: can't open file 'C:\\Users\\Wolf\\Desktop\\gpt-cli\\gtp.py': [Errno 2] Nosuch file or directory
+
+C:\Users\Wolf\Desktop\gpt-cli>python gpt.py
+Traceback (most recent call last):
+  File "C:\Users\Wolf\Desktop\gpt-cli\gpt.py", line 8, in <module>
+    import google.generativeai as genai
+ModuleNotFoundError: No module named 'google'
+
+C:\Users\Wolf\Desktop\gpt-cli>A brief description of a regular occurrence of "propinquity"
+
+C:\Users\Wolf\Desktop\gpt-cli>venv\Scipts\activate
+The system cannot find the path specified.
+
+C:\Users\Wolf\Desktop\gpt-cli>venv\Scripts\activate
+
+(venv) C:\Users\Wolf\Desktop\gpt-cli>A brief description of a regular occurrence of "propinquity"
+'A' is not recognized as an internal or external command,
+operable program or batch file.
+
+(venv) C:\Users\Wolf\Desktop\gpt-cli>python gpt.py
+No API key found. Please set the OPENAI_API_KEY environment variable or `api_key:<key>` value in ~/.config/gpt-cli/gpt.yml
+
+(venv) C:\Users\Wolf\Desktop\gpt-cli>SETX OPENAI_API_KEY=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
+ERROR: Invalid syntax.
+Type "SETX /?" for usage.
+
+(venv) C:\Users\Wolf\Desktop\gpt-cli>python gpt.py
+No API key found. Please set the OPENAI_API_KEY environment variable or `api_key:<key>` value in ~/.config/gpt-cli/gpt.yml
+
+(venv) C:\Users\Wolf\Desktop\gpt-cli>SET OPENAI_API_KEY=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
+
+(venv) C:\Users\Wolf\Desktop\gpt-cli>python gpt.py
+Hi! I'm here to help. Type q or Ctrl-D to exit, c or Ctrl-C to clear the
+conversation, r or Ctrl-R to re-generate the last response. To enter multi-line
+mode, enter a backslash \ followed by a new line. Exit the multi-line mode by
+pressing ESC and then Enter (Meta+Enter).
+> A brief description of a regular occurrence of "propinquity"
+As an AI language model, I do not have personal experiences. However, "propinquity" refers to the closeness in proximityor distance between individuals, objects, or events. A regular occurrence of propinquity could be two colleagues who
+work in the same office every day, or neighbors who live next to each other and often run into each other while taking
+out the trash or walking their dogs.
+
+                                                                             Tokens: 106 | Price: $0.000 | Total: $0.000> A brief description of a regular occurrence of "propinquity"
+> A brief (300 character) bit of imagry that captures a common occurrence of "propinquity"
+Two hands reaching for the same coffee cup on a crowded table, their fingers brushing against each other as they both
+laugh nervously and apologize for the accidental touch.
+
+                                                                             Tokens: 169 | Price: $0.000 | Total: $0.001> A brief (300 character) bit of imagry that captures a common occurrence of "propinquity," that does not involve human
+s
+A bee buzzing around a flower, collecting nectar, and unknowingly brushing up against other
+
+                                                                             Tokens: 223 | Price: $0.000 | Total: $0.001> clear
+Cleared the conversation.
+> A brief (300 character) bit of imagry that captures a common occurrence of "propinquity," that does not involve human
+s
+Two squirrels chase each other up and down a tree, their tails brushing against each other as they playfully dart aroundthe branches.
+
+                                                                              Tokens: 65 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> A brief (300 character) bit of imagry that captures a common occurrence of "propinquity," that does not involve human
+s
+> 10-20 different synonyms for "propinquity"
+
+  1 Closeness
+  2 Proximity
+  3 Nearness
+  4 Adjacency
+  5 Vicinity
+  6 Contiguity
+  7 Neighbourhood
+  8 Immediacy
+  9 Intimacy
+ 10 Convergence
+ 11 Contact
+ 12 Accessibility
+ 13 Approachability
+ 14 Familiarity
+ 15 Affinity
+ 16 Companionship
+ 17 Relationship
+ 18 Association
+ 19 Interconnection
+ 20 Kinship
+
+                                                                             Tokens: 126 | Price: $0.000 | Total: $0.000> A brief (300 character) bit of imagry that captures a common occurrence of "propinquity," that does not involve human
+s
+> clear
+Cleared the conversation.
+> A brief (300 character) bit of imagry that captures a common occurrence of "propinquity," that does not involve human
+s
+Two squirrels, one on a tree branch and the other on the ground, reaching for thesame acorn and almost touching noses
+as they compete for the prize.
+
+                                                                              Tokens: 71 | Price: $0.000 | Total: $0.000> a dialog between two people (4 total lines of discourse) that uses the word propinquity
+Person 1: "I think we should move to a different neighborhood. I'm tired of living so close to my ex."
+
+Person 2: "But propinquity can be a good thing. It can help us build stronger relationships with our neighbors."
+
+Person 1: "I suppose that's true, but I don't want to run into my ex every time Igo to the grocery store."
+
+Person 2: "We can still maintain our distance from your ex while enjoying the benefits of propinquity with our other
+neighbors."
+
+                                                                             Tokens: 209 | Price: $0.000 | Total: $0.001> a dialog between two people (4 total lines of discourse) that uses the word propinquity and is G rated
+> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> Three brief and different (300 characters each) bits of imagry that captures a common occurrence of "propinquity," th
+at does not involve humans
+
+ 1 Two trees standing close together, their branches intertwined and leaves rustling in the wind, a natural example of
+   propinquity in the forest.
+ 2 A school of fish swimming in unison, moving together as if one entity, a demonstration of propinquity in the ocean.
+ 3 Two ants carrying a piece of food, walking side by side on the same path, a small but significant example of
+   propinquity in the world of insects.
+
+                                                                             Tokens: 133 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> Three brief and different (300 characters each) bits of imagry that captures a common occurrence of "propinquity," th
+at does not involve humans and don't use the word itself
+
+ 1 Two trees standing tall and close together in a forest, their branches intertwined and their roots entwined in the
+   earth, a testament to the propinquity of nature.
+ 2 A pair of birds perched on a branch, chirping and grooming each other's feathers, a display of the propinquity that
+   exists between avian companions.
+ 3 A
+
+                                                                             Tokens: 122 | Price: $0.000 | Total: $0.000> Three brief and different (300 characterseach) bits of imagry that captures a common occurrence of "propinquity," th
+at does not involve humans and don't use the word "propinquity"
+
+ 1 Two dogs lying side by side on a sunny patch of grass, their tails wagging in unison as they enjoy each other's
+   company, a picture of the propinquity of canine friendship.
+ 2 A school of fish swimming in close formation, their bodies moving in perfect synchronicity as they navigate the ocean   currents, a testament to the propinquityof marine life.
+ 3 A colony of ants marching in a tight line across the forest floor
+
+                                                                             Tokens: 264 | Price: $0.001 | Total: $0.001> clear
+Cleared the conversation.
+> Three brief and different bits of imagry that captures a common occurrence of "propinquity." These descriptions shoul
+d: NOT use the word "propinquity." NOT involve humans. BE 300 characters or less.
+
+ 1 Squirrels scurrying on the same tree branch, almost bumping into each other asthey gather nuts.
+ 2 Two cats lounging on adjacent rooftops, occasionally stretching their paws towards one another.
+ 3 Flowers of different colors growing side by side, their petals almost touchingin the breeze.
+
+                                                                             Tokens: 119 | Price: $0.000 | Total: $0.000> a dialog between two people (4 total lines of discourse) that uses the word propinquity
+> clear
+Cleared the conversation.
+> a fake inspirational quote that is memorable and pithy that uses the word "propinquity"
+"Propinquity breeds possibility - the closer we are to our goals, the more likelywe are to reach them."
+
+                                                                              Tokens: 56 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> a fake inspirational quote that is memorable and pithy that uses and embraces the word "propinquity"
+"Propinquity is the key to success; keep your goals close and your determination even closer."
+
+                                                                              Tokens: 54 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> a fake inspirational quote that is memorable and pithy that uses and embraces the word "suave"
+"Be suave, be smooth, be unstoppable. Let your confidence shine and your charm conquer."
+
+                                                                              Tokens: 53 | Price: $0.000 | Total: $0.000> a fake inspirational quote that is memorable and pithy that uses and embraces the word "suave"
+> clear
+Cleared the conversation.
+> a fake but unique inspirational quote that is memorable and pithy that uses andembraces the word "propinquity"
+"Propinquity is the hidden force that brings us closer together, even when the world seeks to tear us apart."
+
+                                                                              Tokens: 60 | Price: $0.000 | Total: $0.000> an unexpected inspirational quote that ismemorable and pithy that uses and embraces the word "propinquity"
+"Propinquity is the power of proximity, for when we stand close to one another, we amplify each other's strength and
+potential."
+
+                                                                             Tokens: 120 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> an unexpected inspirational quote that is memorable and very pithy that uses and embraces the word "propinquity"
+"Propinquity breeds possibility; the closer we are to something, the more likely we are to achieve it."
+
+                                                                              Tokens: 58 | Price: $0.000 | Total: $0.000> an unexpected inspirational quote that ismemorable and very pithy that uses and embraces the word "propinquity"
+> clear
+Cleared the conversation.
+> an unexpected inspirational quote that is memorable and very pithy that uses and embraces the word "suave"
+"Be suave like a breeze, gentle yet powerful enough to move mountains."
+
+                                                                              Tokens: 50 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> an unexpected inspirational quote that is memorable and pithy that uses and embraces the word "propinquity"
+> clear
+Cleared the conversation.
+> three definitions for propinquity elegantly worded but clear, pithy, and easy to remember
+
+ 1 Propinquity refers to the nearness or proximity of people or things in physical space, often leading to increased
+   interaction or familiarity.
+ 2 Propinquity describes the closeness or kinship between individuals or groups, either through blood relation or shared   experiences
+
+                                                                              Tokens: 85 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> three quick definitions for propinquity that are elegantly worded but clear, pithy, and easy to remember. They should
+ not use the word itself.
+
+ 1 The closeness of space or time between two things.
+ 2 The nearness of relationship or kinship.
+ 3 The intimacy or familiarity between individuals or groups.
+
+                                                                              Tokens: 80 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> three quick definitions for propinquity that are elegantly worded but clear, pithy, and easy to remember. They should
+ not use the word itself, or articles, or filler words (where possible).
+
+ 1 Nearness in space or time.
+ 2 Proximity or closeness in relationship or kinship.
+ 3 Similarity or likeness in nature or character.
+
+> propinquity pronunciation
+The pronunciation of propinquity is: proh-PING-kwuh-tee.
+
+                                       Tokens: 120 | Price: $0.000 | Total: $0.000> propinquity pronunciation with dashes all lowercase no special characters
+proh-ping-kwuh-tee
+
+                                       Tokens: 150 | Price: $0.000 | Total: $0.001> a rhyme with the word propinquity
+Opportunity knocks with propinquity.
+
+                                       Tokens: 176 | Price: $0.000 | Total: $0.001> a rhyme with the word propinquity
+> rhym
+> clear
+Cleared the conversation.
+> rhyme the word propinquity
+I'm sorry, as an AI language model, I cannot rhyme words without context and I
+cannot provide with a context unless provided. Please provide a sentence or a
+context for the word "propinquity".
+
+                                        Tokens: 60 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> rhyme the word propinquity
+> find
+> find a word that rhymes with propinquity, then make a sentenece that uses them
+to rhyme
+Opportunity is the word that rhymes with propinquity.
+
+"Propinquity may bring us close, but it's opportunity that allows us to choose ourpath and compose."
+
+                                        Tokens: 71 | Price: $0.000 | Total: $0.000> word
+> clear
+Cleared the conversation.
+> word that
+> use both pr
+> clear
+Cleared the conversation.
+> use both "propinquity" and "antiquity" in the same sentence
+The propinquity of the ancient ruins to the modern city is a testament to the
+enduring power of antiquity.
+
+                                        Tokens: 52 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> use both "propinquity" and "antiquity" as a rhyme
+Propinquity and antiquity, Two words of great diversity, One speaks of closeness
+and nearness, The other of ages and oldness.
+
+But in history they often meet, As ancient cities and towns we greet, Their
+propinquity still felt today, In structures and artifacts on display.
+
+So let us cherish both with delight, The propinquity and antiquity in sight
+
+                                       Tokens: 105 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> use both "propinquity" and "antiquity" as a very short rhyme
+Propinquity and antiquity, A duo of words with great density.
+
+                                        Tokens: 45 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> use both "propinquity" and "antiquity" as a very short rhyme with meaning
+Propinquity and antiquity, Close and old, a rarity. A connection strong and true,
+From the past to me and you.
+
+                                        Tokens: 60 | Price: $0.000 | Total: $0.000> p
+> clear
+Cleared the conversation.
+> mnumonic to remember propinquity
+People Really Often Prefer Quietness In Neighborhoods That Involve You.
+
+                                        Tokens: 34 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> mnumonic to remember propinquity meaning
+People really often prefer proximity in close quarters.
+
+                                        Tokens: 30 | Price: $0.000 | Total: $0.000> word that sounds like propinquity and means a similar thing
+The word that sounds like propinquity and means a similar thing is "proximity".
+
+                                        Tokens: 70 | Price: $0.000 | Total: $0.000> word that sounds like propinquity and means a similar thing. make the parts tha
+t sound similar capital
+PROXIMITY is the word that sounds like PROPINQUITY and means a similar thing.
+
+                                       Tokens: 120 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> word that sounds like propinquity and means a similar thing. make the parts of
+the word (letters) that sound similar capital
+PROXIMITY
+
+                                        Tokens: 42 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> word that sounds like propinquity and means a similar thing. make the parts of
+the word (letters) that sound similar capital. the whole word should not be capit
+al
+Proximity
+
+                                        Tokens: 48 | Price: $0.000 | Total: $0.000> word that sounds like propinquity and means a similar thing. make the parts of
+the word that are pronunounced similarly capital. the whole word should not be ca
+pital
+Proximitty
+
+                                        Tokens: 96 | Price: $0.000 | Total: $0.000> PROximity
+PROximity
+
+                                       Tokens: 110 | Price: $0.000 | Total: $0.001> give me a prompt that'd yield that
+"Can you think of a word that sounds like 'propinquity' and means a similar thing?Please capitalize the parts of the word that are pronounced similarly."
+
+                                       Tokens: 162 | Price: $0.000 | Total: $0.001> clear
+Cleared the conversation.
+> Can you think of a word that sounds like 'propinquity' and means a similar thin
+g?
+Please capitalize the parts of the word that are pronounced similarly.
+PROXIMITY
+
+                                        Tokens: 48 | Price: $0.000 | Total: $0.000> clearCleared the conversation.
+> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> A bee buzzing around a flower, collecting nectar, and unknowingly brushing up against
+other
+flowers, transferring pollen from one to another, is an example of
+
+                                               Tokens: 43 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> three short example sentences with propinquity in it
+
+ 1 The propinquity of the two buildings led to frequent interaction between their
+   occupants.
+ 2 The propinquity of the beach to our hotel made it easy for us to enjoy the sunand
+   sand every day.
+ 3 The propinquity of the two cities has resulted in a merging of their cultural
+   traditions.
+
+                                               Tokens: 86 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> three very short example sentences with propinquity in it
+
+ 1 The propinquity of the two buildings made it easy for the employees to commutebetween   them.
+ 2 The propinquity of the two neighbors led to an unexpected friendship.
+ 3 The propinquity of the park to the restaurant made it a popular spot for outdoor
+   dining.
+
+                                               Tokens: 81 | Price: $0.000 | Total: $0.000> clear
+Cleared the conversation.
+> clear
+Cleared the conversation.
+> three unique 8-12 word example sentences with propinquity in it
+
+ 1 The propinquity of the two buildings made it easier to move equipment.
+ 2 The propinquity of the park to my house makes it my favorite spot.
+ 3 The propinquity of our workstations led to a friendship.
+
+                                               Tokens: 77 | Price: $0.000 | Total: $0.000> a definition for it
+Propinquity refers to the state of being close or near in proximity, either in
+terms of physical distance or in terms of relationship or connection.
+
+                                       Tokens: 120 | Price: $0.000 | Total: $0.000
+> a quick short one
+Propinquity means nearness or closeness in space or relationship.
+
+                                       Tokens: 148 | Price: $0.000 | Total: $0.001
+> add to this list: Similarity or likeness in nature or character.
+Nearness in space or time.
+Proximity or closeness in relationship or kinship.
+A state of being in close association or contact. The tendency for things to be
+close together or nearby. The quality of being adjacent or neighboring.
+
+                                       Tokens: 219 | Price: $0.000 | Total: $0.001
+> make a similar one in legnth
+Propinquity refers to the tendency for things to be close together or nearby,
+whether in terms of physical space or time, or in terms of relationship or
+kinship. It can also refer to similarity or likeness in nature or character, as
+well as the quality of being adjacent or neighboring. In essence, propinquity
+encompasses the concept of proximity and nearness, both in a physical and
+figurative sense. It is a term that is often used in social sciences and can be
+applied to various fields, such as geography, psychology, and sociology, to name a
+few.
+
+                                       Tokens: 351 | Price: $0.001 | Total: $0.002
+> i gave u three, so give me a forth short one
+Propinquity denotes closeness or nearness in space, time, or relationship.
+
+                                       Tokens: 390 | Price: $0.001 | Total: $0.003
+> short definition for propinquity
+Propinquity means nearness or closeness in space, time, or relationship.
+
+                                       Tokens: 423 | Price: $0.001 | Total: $0.003
+> short definition for propinquity
+Propinquity means nearness or closeness in space or relationship.
+
+                                       Tokens: 453 | Price: $0.001 | Total: $0.004
+> short definition for propinquity
+Propinquity means closeness or nearness in space or relationship.
+
+                                       Tokens: 483 | Price: $0.001 | Total: $0.005
+> short definition for propinquity
+Propinquity means proximity or nearness in space or relationship.
+
+                                       Tokens: 512 | Price: $0.001 | Total: $0.006
+>
