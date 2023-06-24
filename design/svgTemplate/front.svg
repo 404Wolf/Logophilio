@@ -43,7 +43,7 @@
     </style>
 
     <!-- Main image (background) -->
-    <image x="7.5" y="35" width="111" href="image.png" style="filter: brightness(80%)" />
+    <image x="7.5" y="35" width="111" href="image.png" style="filter: brightness(90%)" />
 
     <!-- Top chip (for primary word info) -->
     <path d="M0,0 H126 V56 C126,56 63,62 0,56 z" fill="white" />
