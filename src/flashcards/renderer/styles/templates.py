@@ -5,7 +5,7 @@ import jinja2
 
 from src.flashcards.renderer.styles import styles
 
-__all__ = ("templates",)
+__all__ = ("templates", "sizes")
 
 jinjaEnv = jinja2.Environment(
     loader=jinja2.PackageLoader("flashcards", "renderer/styles"),
