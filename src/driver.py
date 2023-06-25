@@ -1,5 +1,5 @@
 from flashcards.flashcard import Flashcard
-from src.flashcards.renderer.render import renderFlashcardFront
+from src.flashcards.renderer.styles.watercolor.renderer import WatercolorRenderer
 from src.flashcards.renderer.utils import file_as_base64
 
 flashcard = Flashcard(
@@ -25,4 +25,6 @@ flashcard = Flashcard(
     images=[file_as_base64("flashcards/graphics/examples/wordImage.png")],
 )
 
-renderFlashcardFront(flashcard, "flashcards/graphics/examples/front.pdf")
+renderer = WatercolorRenderer(flashcard)
+with open("output2.pdf", "wb") as output_file:
+    output_file.write(renderer.render())
