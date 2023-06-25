@@ -25,5 +25,4 @@ flashcard = Flashcard(
     images=[file_as_base64("flashcards/graphics/examples/wordImage.png")],
 )
 
-with open("flashcards/graphics/examples/front.svg", "w") as f:
-    f.write(renderFlashcardFront(flashcard))
+renderFlashcardFront(flashcard, "flashcards/graphics/examples/front.pdf")
