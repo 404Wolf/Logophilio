@@ -1,13 +1,10 @@
 import base64
 import io
-from functools import partial
-from threading import Thread
-from typing import Literal
 
 from pypdf import PdfWriter, PageObject
 
-from src.flashcards import convert_to_pdf
 from src.flashcards.graphics import icons
+from src.flashcards.renderer.converter import convert_to_pdf
 from src.flashcards.renderer.styles.templates import sizes
 
 
@@ -26,24 +23,12 @@ class GenericRenderer:
         Returns:
             bytes: The PDF as a bytes stream.
         """
-        renders = [None, None]
-
-        def _render_front(renders):
-            renders[0] = base64.b64decode(self.renderFront("mini"))
-
-        def _render_back(renders):
-            renders[1] = base64.b64decode(self.renderBack("mini"))
-
-        front_thread = Thread(target=partial(_render_front, renders))
-        back_thread = Thread(target=partial(_render_back, renders))
-        front_thread.start()
-        back_thread.start()
-        front_thread.join()
-        back_thread.join()
+        front = base64.b64decode(self.renderFront("mini"))
+        back = base64.b64decode(self.renderBack("mini"))
 
         writer = PdfWriter()
-        writer.append(io.BytesIO(renders[0]))
-        writer.append(io.BytesIO(renders[1]))
+        writer.append(io.BytesIO(front))
+        writer.append(io.BytesIO(back))
 
         bytes_stream = io.BytesIO()
         writer.write(bytes_stream)

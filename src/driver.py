@@ -26,5 +26,5 @@ flashcard = Flashcard(
 )
 
 renderer = WatercolorRenderer(flashcard)
-with open("output2.pdf", "wb") as output_file:
+with open("output.pdf", "wb") as output_file:
     output_file.write(renderer.render())
