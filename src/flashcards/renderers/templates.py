@@ -1,14 +1,15 @@
 import json
+from contextlib import suppress
 from dataclasses import dataclass
 
 import jinja2
 
-from src.flashcards.renderer.styles import styles
+from src.flashcards.renderers import sizes, styles
 
 __all__ = ("templates", "sizes")
 
 jinjaEnv = jinja2.Environment(
-    loader=jinja2.PackageLoader("flashcards", "renderer/styles"),
+    loader=jinja2.PackageLoader("flashcards", "renderers/styles"),
     autoescape=jinja2.select_autoescape(),
 )
 templates = {}
@@ -39,11 +40,9 @@ class Template:
 
 
 for style in styles:
-    with open(f"flashcards/renderer/styles/{style}/sizes.json") as f:
-        sizes = json.load(f)
-
     for size in sizes:
-        templates[f"{style}_{size}"] = Template(
-            front=jinjaEnv.get_template(f"{style}/{size}/front.svg"),
-            back=jinjaEnv.get_template(f"{style}/{size}/back.svg"),
-        )
+        with suppress(FileNotFoundError):
+            templates[f"{style}_{size}"] = Template(
+                front=jinjaEnv.get_template(f"{style}/{size}/front.svg"),
+                back=jinjaEnv.get_template(f"{style}/{size}/back.svg"),
+            )

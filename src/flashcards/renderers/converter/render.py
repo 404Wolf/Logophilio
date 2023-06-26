@@ -1,7 +1,7 @@
-from src.flashcards.renderer.converter.engine import webdriver_chrome
+from src.flashcards.renderers.converter.engine import webdriver_chrome
 
 
-def convert_to_pdf(data: str, mimetype: str, width: int, height: int) -> str:
+def convertToPdf(data: str, mimetype: str, width: int, height: int) -> str:
     """
     Convert a chrome preview-able file to a base-64 encoded pdf using Selenium.
 
@@ -14,8 +14,8 @@ def convert_to_pdf(data: str, mimetype: str, width: int, height: int) -> str:
     Returns:
         str: The base64 encoded pdf.
     """
-    assert isinstance(width, float)
-    assert isinstance(height, float)
+    assert isinstance(width, (float, int)), f"Width must be num, not {type(width)}."
+    assert isinstance(height, (float, int)), f"Height must be num, not {type(height)}."
     webdriver_chrome.get(f"about:blank")
     webdriver_chrome.execute_cdp_cmd(
         "Emulation.setVisibleSize",

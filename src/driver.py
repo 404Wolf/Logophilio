@@ -1,10 +1,9 @@
 from flashcards.flashcard import Flashcard
-from src.flashcards.renderer.styles.watercolor.renderer import WatercolorRenderer
-from src.flashcards.renderer.utils import file_as_base64
+from src.flashcards.renderers.utils import fileAsBase64
 
 flashcard = Flashcard(
     word="propinquity",
-    part_of_speech="noun",
+    partOfSpeech="noun",
     pronunciation="proh-ping-kwi-tee",
     synonyms=["closeness", "nearness", "proximity", "affinity", "kinship", "likeness"],
     sentences=[
@@ -22,7 +21,7 @@ flashcard = Flashcard(
         "likely we are to achieve it"
     ],
     rhyming=["proximity", "affinity", "kinship", "likeness", "closeness", "nearness"],
-    images=[file_as_base64("flashcards/graphics/examples/wordImage.png")],
+    images=[fileAsBase64("flashcards/graphics/examples/wordImage.png")],
 )
 
 with open("output.pdf", "wb") as output_file:

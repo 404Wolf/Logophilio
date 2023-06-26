@@ -1,11 +1,11 @@
 import base64
 import io
 
-from pypdf import PdfWriter, PageObject
+from pypdf import PdfWriter
 
 from src.flashcards.graphics import icons
-from src.flashcards.renderer.converter import convert_to_pdf
-from src.flashcards.renderer.styles.templates import sizes
+from src.flashcards.renderers.converter import convertToPdf
+from src.flashcards.renderers.sizes import sizes
 
 
 class GenericRendererUsageError(NotImplementedError):
@@ -67,7 +67,7 @@ class GenericRenderer:
         """
         raise GenericRendererUsageError()
 
-    def _process_render(self, render: str, size: str) -> str:
+    def _processRender(self, render: str, size: str) -> str:
         """
         Perform post-processing on a render and convert it to a base-64 PDF.
 
@@ -78,13 +78,13 @@ class GenericRenderer:
         Returns:
             str: The base-64 PDF.
         """
-        return convert_to_pdf(
+        return convertToPdf(
             base64.b64encode(render.encode("utf-8")).decode("utf-8"),
             "image/svg+xml",
-            *map(lambda width: float(width[:-2]), sizes[size].split(";")[1].split("*")),
+            *sizes[size].pixel_dimensions,
         )
 
-    def _bolded_sentences(self) -> list[str]:
+    def _boldedSentences(self) -> list[str]:
         """
         Surround the word itself in bold tags.
 
@@ -104,7 +104,7 @@ class GenericRenderer:
             sentences.append(sentence)
         return sentences
 
-    def _part_of_speech_icon_base64(self) -> str:
+    def _partOfSpeechIconBase64(self) -> str:
         """
         Get the base-64 encoded part of speech icon.
 
@@ -112,5 +112,5 @@ class GenericRenderer:
             str: The base-64 encoded part of speech icon.
         """
         return (
-            f"data:image/svg+xml;base64,{icons[self.flashcard.fields.part_of_speech]}"
+            f"data:image/svg+xml;base64,{icons[self.flashcard.fields.partOfSpeech]}"
         )

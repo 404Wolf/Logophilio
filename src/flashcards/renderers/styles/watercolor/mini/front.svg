@@ -7,20 +7,20 @@
             font-weight: 300;
         }
 
-        b {
-            font-weight: bold;
-            font-size: 4.3px;
-        }
-
         .example-sentences p {
             margin-bottom: -2px;
             padding-left: 13px;
             padding-right: 13px;
             font-size: 5px;
             font-family: 'Acumin Variable Concept';
-            line-height: 4.4px;
+            line-height: 5px;
             color: #454545;
             text-align: left;
+        }
+
+        .example-sentences b {
+            font-weight: bold;
+            font-size: 5.2px;
         }
 
         .inspirational-quote {
@@ -49,14 +49,14 @@
     <path d="M0,0 H126 V56 C126,56 63,62 0,56 z" fill="white" />
 
     <!-- Bottom chip (for secondary word info) -->
-    <path d="M0,180 H126 V130 C126,132 63,124 0,130 z" fill="white" />
+    <path d="M0,180 H126 V129 C126,129 63,124 0,129 z" fill="white" />
 
     <!-- Frame (in front of image) -->
     <path d="M0,0v180h126V0H0z M118.2,135.2c0,19.9-16.1,36-36,36H15c-4,0-7.2-3.2-7.2-7.2V15c0-4,3.2-7.2,7.2-7.2h96
 	c4,0,7.2,3.2,7.2,7.2V135.2z" fill="rgb(41, 171, 226)" />
 
     <!-- Part of speech icon (bottom right) -->
-    <image x="108" y="163" width="12" href="data:image/svg+xml;base64,{{ PART_OF_SPEECH_ICON }}" />
+    <image x="108" y="163" width="12" href="{{ PART_OF_SPEECH_ICON }}" />
 
     <!-- Actual vocab word -->
     <text x="48%" y="28" text-anchor="middle" font-family="Monotype Corsiva" font-size="23"
@@ -74,7 +74,7 @@
     <foreignObject x="0" y="41" width="126" height="24">
         <xhtml xmlns="http://www.w3.org/1999/xhtml">
             <p class="inspirational-quote">
-                “{{ QUOTE }}”
+                "{{ QUOTE }}"
             </p>
         </xhtml>
     </foreignObject>
@@ -89,7 +89,7 @@
 
 
     <!-- Example sentences -->
-    <foreignObject x="0" y="128" width="126" height="50">
+    <foreignObject x="0" y="127" width="126" height="50">
         <xhtml xmlns="http://www.w3.org/1999/xhtml">
             <div class="example-sentences">
                 <p>
