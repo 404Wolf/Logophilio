@@ -25,6 +25,5 @@ flashcard = Flashcard(
     images=[file_as_base64("flashcards/graphics/examples/wordImage.png")],
 )
 
-renderer = WatercolorRenderer(flashcard)
 with open("output.pdf", "wb") as output_file:
-    output_file.write(renderer.render())
+    output_file.write(flashcard.render("watercolor", "mini"))

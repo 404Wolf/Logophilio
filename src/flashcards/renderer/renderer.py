@@ -8,23 +8,31 @@ from src.flashcards.renderer.converter import convert_to_pdf
 from src.flashcards.renderer.styles.templates import sizes
 
 
+class GenericRendererUsageError(NotImplementedError):
+    pass
+
+
 class GenericRenderer:
     STYLE = "generic"
 
     def __init__(self, flashcard):
         self.flashcard = flashcard
 
-    def render(self) -> bytes:
+    def render(self, *args, **kwargs) -> bytes:
         """
         Render a flashcard to a PDF, and return the PDF as a bytes stream.
 
         Calls renderFront and renderBack, and combines the results into a single PDF.
 
+        Args:
+            *args: Positional arguments to pass to renderFront and renderBack.
+            **kwargs: Keyword arguments to pass to renderFront and renderBack.
+
         Returns:
             bytes: The PDF as a bytes stream.
         """
-        front = base64.b64decode(self.renderFront("mini"))
-        back = base64.b64decode(self.renderBack("mini"))
+        front = base64.b64decode(self.renderFront(*args, **kwargs))
+        back = base64.b64decode(self.renderBack(*args, **kwargs))
 
         writer = PdfWriter()
         writer.append(io.BytesIO(front))
@@ -45,6 +53,7 @@ class GenericRenderer:
         Returns:
             str: The base-64 PDF.
         """
+        raise GenericRendererUsageError()
 
     def renderBack(self, size: str) -> bytes:
         """
@@ -56,6 +65,7 @@ class GenericRenderer:
         Returns:
             str: The base-64 PDF.
         """
+        raise GenericRendererUsageError()
 
     def _process_render(self, render: str, size: str) -> str:
         """
