@@ -1,4 +1,4 @@
-from src.flashcards.renderers.converter.engine import webdriver_chrome
+from src.converter.engine import webdriver_chrome
 
 
 def convertToPdf(data: str, mimetype: str, width: int, height: int) -> str:

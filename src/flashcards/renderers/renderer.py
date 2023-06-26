@@ -4,7 +4,7 @@ import io
 from pypdf import PdfWriter
 
 from src.flashcards.graphics import icons
-from src.flashcards.renderers.converter import convertToPdf
+from src.converter import convertToPdf
 from src.flashcards.renderers.sizes import sizes
 
 
