@@ -74,7 +74,7 @@
     <foreignObject x="0" y="41" width="126" height="24">
         <xhtml xmlns="http://www.w3.org/1999/xhtml">
             <p class="inspirational-quote">
-                "{{ QUOTE }}"
+                "{{ INSPIRATIONAL_QUOTE }}"
             </p>
         </xhtml>
     </foreignObject>
