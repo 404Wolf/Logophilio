@@ -1,5 +1,3 @@
-import collections 
-import collections.abc
 import pptx
 
 template = pptx.Presentation('template.pptx')
