@@ -1,6 +1,7 @@
 import json
 
-from src.flashcards.renderers.utils import fileAsBase64
+from src.flashcards.utils.misc import fileAsBase64
+
 
 __all__ = ("icons",)
 
