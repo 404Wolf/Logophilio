@@ -1,1 +1,0 @@
-Vibrant vector watercolor of { PROMPT }, easily comprehensible, { BACKGROUND_COLOR }ed-background, center-focused
