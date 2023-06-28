@@ -1,13 +1,23 @@
 {
-    "aesthetic": "Vibrant vector watercolor of {{ PROMPT }}, easily comprehensible, orange background, center-focused",
-    "fields": {
-        "synonyms": 6,
-        "antonyms": 0,
-        "sentences": 3,
-        "definitions": 3,
-        "images": 3,
-        "inspirationalQuotes": 1,
-        "rhyming": 4,
-        "origins": 0
+    "dalleStyle": "Vibrant vector watercolor of {PROMPT}, easily comprehensible, orange background, center-focused",
+    "fieldKwargs": {
+        "synonyms": {
+            "count": 3
+        },
+        "sentences": {
+            "count": 3
+        },
+        "definitions": {
+            "count": 3
+        },
+        "images": {
+            "count": 3
+        },
+        "inspirationalQuotes": {
+            "count": 1
+        },
+        "rhyming": {
+            "count": 4
+        }
     }
 }

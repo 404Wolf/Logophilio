@@ -18,18 +18,19 @@ class Style:
 
     Attributes:
         name: The name of the style.
-        front: The front of the flashcard.
-        back: The back of the flashcard.
-        aesthetic: The aesthetic of the flashcard. This is a template with a {prompt}
-            placeholder, that tells DALLE how to style the image.
-        fields: The number of items needed for each field to generate the flashcard.
+        front: The front template of the flashcard.
+        back: The back template of the flashcard.
+        dalleTemplate: The dalle template to use for generating images for the style of
+            the flashcard; should include the a {PROMPT} placeholder.
+        fieldKwargs: The keyword-arguments to pump through the flashcard data generator.
+            includes kwargs like 'count,' and 'boldWord.'
     """
 
     name: str
     front: jinja2.Template
     back: jinja2.Template
-    aesthetic: jinja2.Template
-    fields: dict[str, int]
+    dalleTemplate: jinja2.Template
+    fieldSettings: dict[str, dict[str, object]] = None
 
     @classmethod
     def fromName(cls, name: str) -> "Style":
@@ -48,8 +49,7 @@ class Style:
             name=name,
             front=jinjaEnv.get_template(f"{name}/front.svg"),
             back=jinjaEnv.get_template(f"{name}/back.svg"),
-            aesthetic=jinjaEnv.from_string(styleConfig["aesthetic"]),
-            fields=styleConfig["fields"],
+            dalleTemplate=styleConfig["dalleTemplate"],
         )
 
 
