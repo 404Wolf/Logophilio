@@ -1,0 +1,107 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="126" height="180" version="1.1" xmlns="http://www.w3.org/2000/svg" encoding="utf-8">
+    <!-- Styles -->
+    <style type="text/css">
+        p {
+            line-height: 4.4px;
+            font-weight: 300;
+        }
+
+        .example-sentences p {
+            margin-bottom: -2px;
+            padding-left: 13px;
+            padding-right: 13px;
+            font-size: 5px;
+            font-family: 'Acumin Variable Concept';
+            line-height: 5px;
+            color: #454545;
+            text-align: left;
+        }
+
+        .example-sentences b {
+            font-weight: bold;
+            font-size: 5.2px;
+        }
+
+        .inspirational-quote {
+            color: #454545;
+            padding-left: 13px;
+            padding-right: 13px;
+            text-align: right;
+            font-size: 4.4px;
+            font-family: 'Times New Roman';
+            font-style: italic;
+        }
+
+        .synonym {
+            fill: white;
+            font-family: 'Acumin Variable Concept';
+            font-weight: bold;
+            font-size: 8px;
+            filter: drop-shadow(0px 0px 5.5px rgba(20, 20, 20, .5))
+        }
+    </style>
+
+    <!-- Main image (background) -->
+    <image x="7.5" y="35" width="111" href="data:image/png;base64,{{ IMAGE }}" style="filter: brightness(90%)" />
+
+    <!-- Top chip (for primary word info) -->
+    <path d="M0,0 H126 V56 C126,56 63,62 0,56 z" fill="white" />
+
+    <!-- Bottom chip (for secondary word info) -->
+    <path d="M0,180 H126 V129 C126,129 63,124 0,129 z" fill="white" />
+
+    <!-- Frame (in front of image) -->
+    <path d="M0,0v180h126V0H0z M118.2,135.2c0,19.9-16.1,36-36,36H15c-4,0-7.2-3.2-7.2-7.2V15c0-4,3.2-7.2,7.2-7.2h96
+	c4,0,7.2,3.2,7.2,7.2V135.2z" fill="rgb(41, 171, 226)" />
+
+    <!-- Part of speech icon (bottom right) -->
+    <image x="108" y="163" width="12" href="{{ PART_OF_SPEECH_ICON }}" />
+
+    <!-- Actual vocab word -->
+    <text x="48%" y="28" text-anchor="middle" font-family="Monotype Corsiva" font-size="23"
+        fill="black">{{ WORD }}</text>
+
+    <!-- Part of speech label -->
+    <text x="13" y="41.5" text-anchor="start" font-family="Acumin Variable Concept" font-size="5.5"
+        fill="#454545">{{ PART_OF_SPEECH }}</text>
+
+    <!-- Pronunciation label -->
+    <text x="114" y="41.5" text-anchor="end" font-family="Acumin Variable Concept" font-size="5.5"
+        fill="#454545">{{ PRONUNCIATION }}</text>
+
+    <!-- Inspirational quote -->
+    <foreignObject x="0" y="41" width="126" height="24">
+        <xhtml xmlns="http://www.w3.org/1999/xhtml">
+            <p class="inspirational-quote">
+                "{{ INSPIRATIONAL_QUOTE }}"
+            </p>
+        </xhtml>
+    </foreignObject>
+
+    <!-- Synonyms -->
+    <text x="13" y="80.4" text-anchor="start" class="synonym">{{ SYNONYM_1 }}</text>
+    <text x="13" y="96.2" text-anchor="start" class="synonym">{{ SYNONYM_2 }}</text>
+    <text x="13" y="112" text-anchor="start" class="synonym">{{ SYNONYM_3 }}</text>
+    <text x="114" y="80.4" text-anchor="end" class="synonym">{{ SYNONYM_4 }}</text>
+    <text x="114" y="96.2" text-anchor="end" class="synonym">{{ SYNONYM_5 }}</text>
+    <text x="114" y="112" text-anchor="end" class="synonym">{{ SYNONYM_6 }}</text>
+
+
+    <!-- Example sentences -->
+    <foreignObject x="0" y="127" width="126" height="50">
+        <xhtml xmlns="http://www.w3.org/1999/xhtml">
+            <div class="example-sentences">
+                <p>
+                    {{ SENTENCE_1 }}
+                </p>
+                <p>
+                    {{ SENTENCE_2 }}
+                </p>
+                <p style="padding-right: 22px">
+                    {{ SENTENCE_3 }}
+                </p>
+            </div>
+        </xhtml>
+    </foreignObject>
+</svg>
