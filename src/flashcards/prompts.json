@@ -1,0 +1,179 @@
+{
+	"dallePrompt": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+			"role": "user",
+			"content": "Provide {count} brief, different bits of imagery that capture a common occurrence of \"{word}\" These descriptions should: - NOT use the word \"{word}.\"\n- NOT involve humans.\n- BE 300 characters or less."
+		}]
+	},
+	"partOfSpeech": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a very knowledgeable librarian who is very good at pronouncing words, and follows instructions concisely and well. You always respond from the following options: noun, verb, adjective, adverb, pronoun, preposition, conjunction, interjection, determiner, or article."
+			},
+			{
+				"role": "system",
+				"content": "Always respond all lowercase, with one word. Never add a prefix or suffix, or any filler text. Only respond with one of the options above. Only."
+			},
+			{
+				"role": "user",
+				"content": "What part of speech is the word {word}?"
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"pronunciation": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a very knowledgeable librarian who is very good at pronouncing words, and follows instructions concisely and well. You always respond with the pronunciation of the word"
+			},
+			{
+				"role": "system",
+				"content": "Always respond all lowercase, with one word, separated phonetically by hyphens. Do not add any prefix or suffix text. Only respond with a hyphenated pronunciation."
+			},
+			{
+				"role": "user",
+				"content": "What is the pronunciation of the word {word}?",
+				"max_tokens": 90,
+				"temperature": 0.7,
+				"presence_penalty": 0.4,
+				"frequency_penalty": 0.6
+			}
+		]
+	},
+	"synonyms": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a very knowledgeable librarian that helps people learn words. You follow instructions exactly as given."
+			},
+			{
+				"role": "user",
+				"content": "Provide {count} synonyms for the word {word}, separated by newlines."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"antonyms": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a very knowledgeable librarian that helps people learn words. You follow instructions exactly as given."
+			},
+			{
+				"role": "user",
+				"content": "Provide {count} antonyms for the word {word}, separated by newlines."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"definitions": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a very knowledgeable librarian that helps people understand the meaning of words. You follow instructions exactly as given."
+			},
+			{
+				"role": "user",
+				"content": "Provide {count} definitions for the word {word}, separated by newlines."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"sentences": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a wise poet who writes short disparate sentences using particular words."
+			},
+			{
+				"role": "user",
+				"content": "Give me {count} sentences using the word {word}, separated by newlines."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"inspirationalQuotes": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a very famous speaker who says many great and deeply inspiring things. Each of your quotes embraces a specific word, and is flavored towards that word. You're also known to be very pithy when you speak, so each of your quotes is a short-ish sentence."
+			},
+			{
+				"role": "system",
+				"content": "Each time you respond, you must provide a new and unique quote."
+			},
+			{
+				"role": "user",
+				"content": "Give me {count} inspirational quotes using the word {word}, separated by newlines."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"origin": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a good historian who is very pithy and articulate. You follow instructions exactly as given, and provide down-to-the-point origins of words provided. You do not restate the question, and you provide a single sentence response that is clear and accurate."
+			},
+			{
+				"role": "user",
+				"content": "In one pithy sentence that doesn't restate the question, what is the origin of the word \"{word}\"?"
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
+	},
+	"rhyming": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a musician who is very good at rhyming words, and follows instructions concisely and well."
+			},
+			{
+				"role": "user",
+				"content": "Give me {count} words that rhyme with {word}, separated by newlines."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.0,
+		"frequency_penalty": 0.0
+	},
+	"offensive": {
+		"model": "gpt-3.5-turbo",
+		"messages": [{
+				"role": "system",
+				"content": "You are a moderator. You only respond with 'yes' or 'no,' without punctuation or any other words in your responses."
+			},
+			{
+				"role": "user",
+				"content": "Is {word} an offensive word? answer with \"yes\" or \"no\" only with no other words or punctuation."
+			}
+		],
+		"max_tokens": 90,
+		"temperature": 0.3
+	}
+}
