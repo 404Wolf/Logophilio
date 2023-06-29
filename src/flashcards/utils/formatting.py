@@ -1,5 +1,18 @@
 import string
 
+def camelCaseToSnakeCase(text: str) -> str:
+    """
+    Convert a camelCase string to a snake_case string.
+
+    Args:
+        text: The text to convert.
+
+    Returns:
+        The converted text.
+    """
+    return "".join(
+        "_" + char.lower() if char.isupper() else char for char in text
+    ).lstrip("_")
 
 def punctuate(text: str) -> str:
     """
@@ -52,4 +65,4 @@ def embolden(text: str, keyword: str) -> str:
     Returns:
         The emboldened text.
     """
-    return text.replace(keyword, f"<b>{keyword}</b>")
+    return capitalize(text.lower().replace(keyword.lower(), f"<b>{keyword}</b>"))
