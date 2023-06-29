@@ -1,23 +1,29 @@
 {
-    "dalleStyle": "Vibrant vector watercolor of {PROMPT}, easily comprehensible, orange background, center-focused",
-    "fieldKwargs": {
-        "synonyms": {
-            "count": 3
-        },
-        "sentences": {
-            "count": 3
-        },
-        "definitions": {
-            "count": 3
-        },
-        "images": {
-            "count": 3
-        },
-        "inspirationalQuotes": {
-            "count": 1
-        },
-        "rhyming": {
-            "count": 4
-        }
+    "synonyms": {
+        "count": 3,
+        "capitalize": true,
+    },
+    "sentences": {
+        "count": 3,
+        "capitalize": true,
+        "punctuate": true
+    },
+    "definitions": {
+        "count": 3,
+        "capitalize": true,
+        "punctuate": true
+    },
+    "images": {
+        "count": 3,
+        "dalleTemplate": "Vibrant vector watercolor of {PROMPT}, easily comprehensible, orange background, center-focused"
+    },
+    "inspirationalQuotes": {
+        "count": 1,
+        "capitalize": true,
+        "punctuate": false
+    },
+    "rhyming": {
+        "count": 4,
+        "capitalize": true
     }
 }
