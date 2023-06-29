@@ -1,19 +1,24 @@
 import asyncio
 import json
-from dataclasses import asdict
 import logging
+from dataclasses import asdict
+from pprint import pprint
 
 from flashcards.flashcard import Flashcard
-
+from src.flashcards import styles
 
 logging.basicConfig(level=logging.DEBUG)
 
-async def main():
-    flashcard = Flashcard("Propinquity", "watercolor")
-    await flashcard.generate()
 
-    with open("test.json", "w") as f:
-        json.dump(asdict(flashcard.fields), f, indent=4)
+async def main():
+    flashcard = Flashcard("Propinquity", styles["watercolor"])
+    await flashcard.generate(
+        genKwargs={
+            "images": {"count": 1},
+            "definitions": {"count": 3},
+        }
+    )
+    pprint(flashcard.fields)
 
 
 if __name__ == "__main__":
