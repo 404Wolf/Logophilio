@@ -1,4 +1,5 @@
 import base64
+import string
 
 
 def fileAsBase64(path: str) -> str:
