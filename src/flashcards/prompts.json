@@ -28,23 +28,24 @@
 	},
 	"pronunciation": {
 		"model": "gpt-3.5-turbo",
-		"messages": [{
+		"messages": [
+			{
 				"role": "system",
 				"content": "You are a very knowledgeable librarian who is very good at pronouncing words, and follows instructions concisely and well. You always respond with the pronunciation of the word"
 			},
 			{
 				"role": "system",
-				"content": "Always respond all lowercase, with one word, separated phonetically by hyphens. Do not add any prefix or suffix text. Only respond with a hyphenated pronunciation."
+				"content": "Always respond with one word, separated phonetically by hyphens. Do not add any prefix or suffix text. Only respond with a hyphenated pronunciation."
 			},
 			{
 				"role": "user",
-				"content": "What is the pronunciation of the word {word}?",
-				"max_tokens": 90,
-				"temperature": 0.7,
-				"presence_penalty": 0.4,
-				"frequency_penalty": 0.6
+				"content": "What is the pronunciation of the word {word}?"
 			}
-		]
+		],
+		"max_tokens": 90,
+		"temperature": 0.7,
+		"presence_penalty": 0.4,
+		"frequency_penalty": 0.6
 	},
 	"synonyms": {
 		"model": "gpt-3.5-turbo",
@@ -64,9 +65,14 @@
 	},
 	"antonyms": {
 		"model": "gpt-3.5-turbo",
-		"messages": [{
+		"messages": [
+			{
 				"role": "system",
 				"content": "You are a very knowledgeable librarian that helps people learn words. You follow instructions exactly as given."
+			},
+			{
+				"role": "system",
+				"content": "When you provide answers, you are clear and short. You put one antonym on each line, without any prefix or suffix text at all. You only provide the antonym, and nothing else."
 			},
 			{
 				"role": "user",
@@ -86,7 +92,7 @@
 			},
 			{
 				"role": "user",
-				"content": "Provide {count} definitions for the word {word}, separated by newlines."
+				"content": "Provide {count} definitions for the word {word}, separated by newlines. Each line should ONLY consist of the definition and a number (1. <def>)\\n(2. <def>), and nothing else. No prefix or filler text; be down to the point."
 			}
 		],
 		"max_tokens": 90,
