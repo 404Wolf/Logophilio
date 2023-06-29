@@ -18,3 +18,6 @@ class Image:
     size: tuple[int, int]
     prompt: str
     dalleTemplate: str = field(repr=False)
+
+    def __str__(self) -> str:
+        return f"data:image/png;base64,{self.base64}"
