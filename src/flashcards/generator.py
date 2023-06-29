@@ -1,8 +1,8 @@
 import asyncio
 import json
-import string
 
 import aiohttp
+from unidecode import unidecode
 
 from src import keys
 from src.flashcards.utils import formatting
@@ -100,17 +100,20 @@ class Generator:
         """
         if not self._pronunciation:
             await self._genPronunciation()
-        if lowercase:
-            return self._pronunciation.lower()
-        else:
-            return self._pronunciation
 
-    async def synonyms(self, count: int = 1):
+        pronunciation = unidecode(self._pronunciation)
+        if lowercase:
+            return pronunciation.lower()
+        else:
+            return pronunciation
+
+    async def synonyms(self, count: int = 1, capitalize: bool = False):
         """
         Synonyms of the word.
 
         Args:
             count: The minimum number of synonyms to return.
+            capitalize: Whether to capitalize the synonyms.
 
         Returns:
             Synonyms of the word.
@@ -124,6 +127,10 @@ class Generator:
         if not self._synonyms or len(self._synonyms) < count:
             synonymCount = len(self._synonyms) if self._synonyms is not None else 0
             await self._genSynonyms(count - synonymCount)
+
+        if capitalize:
+            return [formatting.capitalize(syn) for syn in self._synonyms]
+
         return self._synonyms
 
     async def antonyms(self, count: int = 1):
@@ -150,6 +157,7 @@ class Generator:
         self,
         count: int = 1,
         boldTag: bool = False,
+        capitalize: bool = False,
         punctuate: bool = False,
     ):
         """
@@ -158,6 +166,7 @@ class Generator:
         Args:
             count: The number of sentences to return.
             boldTag: Whether to bold the word in the sentences.
+            capitalize: Whether to capitalize the sentences.
             punctuate: Whether to punctuate the sentences.
 
         Returns:
@@ -165,25 +174,28 @@ class Generator:
         """
         if not self._sentences:
             await self._fetchDictionaryData()
-        if not self._sentences or len(self._sentences) < count:
+        if len(self._sentences) < count:
             await self._genSentences(count - len(self._sentences))
         sentences = self._sentences[:count]
 
         if boldTag:
-            sentences = map(formatting.embolden, sentences)
+            sentences = map(lambda text: formatting.embolden(text, self.word), sentences)
 
         if punctuate:
             sentences = map(formatting.punctuate, sentences)
         else:
             sentences = map(formatting.depunctuate, sentences)
 
-        return tuple(sentences)
+        if capitalize:
+            sentences = map(formatting.capitalize, sentences)
+
+        return list(sentences)
 
     async def definitions(
         self,
         count: int = 1,
         punctuate: bool = False,
-        capitaize: bool = False,
+        capitalize: bool = False,
     ):
         """
         Definitions of the word.
@@ -204,21 +216,36 @@ class Generator:
         else:
             definitions = map(formatting.depunctuate, definitions)
 
-        if capitaize:
+        if capitalize:
             definitions = map(formatting.capitalize, definitions)
 
-        return tuple(definitions)
+        return list(definitions)
 
-    async def inspirationalQuotes(self, count: int = 1):
+    async def inspirationalQuotes(
+        self,
+        count: int = 1,
+        capitalize: bool = False,
+        punctuate: bool = False,
+    ):
         """
         Inspirational quotes that use the word.
 
         Args:
             count: The number of inspirational quotes to return.
+            capitalize: Whether to capitalize the inspirational quotes.
+            punctuate: Whether to punctuate the inspirational quotes.
         """
         if not self._inspirationalQuotes:
             await self._genInspirationalQuotes(count)
-        return self._inspirationalQuotes
+
+        inspirationalQuotes = self._inspirationalQuotes[:count]
+        if capitalize:
+            inspirationalQuotes = map(formatting.capitalize, inspirationalQuotes)
+
+        if punctuate:
+            inspirationalQuotes = map(formatting.punctuate, inspirationalQuotes)
+
+        return list(inspirationalQuotes)
 
     async def rhymes(self, count: int = 1):
         """
@@ -247,7 +274,9 @@ class Generator:
         if not self._images:
             await self._genImages(count, dalleTemplate=dalleTemplate)
         if len(self._images) < count:
-            await self._genImages(count - len(self._images), dalleTemplate=dalleTemplate)
+            await self._genImages(
+                count - len(self._images), dalleTemplate=dalleTemplate
+            )
         return self._images[:count]
 
     async def offensive(self) -> bool:
@@ -330,7 +359,7 @@ class Generator:
                     definitions.append(meaning["definition"].lower())
                     synonyms.extend(map(lambda item: item.lower(), meaning["synonyms"]))
                     antonyms.extend(map(lambda item: item.lower(), meaning["antonyms"]))
-                    if "example" in meaning:
+                    if "example" in meaning and len(meaning["example"]).split(" ") < 14:
                         sentences.append(meaning["example"].lower())
 
         if origin:
@@ -405,7 +434,7 @@ class Generator:
     async def _genInspirationalQuotes(self, count: int = 1):
         """Generate inspirational quote(s) using GPT."""
         quotes = await self._genTextField("inspirationalQuotes", {"count": count})
-        quotes = [quote.strip() for quote in quotes.split("\n")]
+        quotes = [quote.strip()[1:-1] for quote in quotes.split("\n")]
         self._inspirationalQuotes.extend(quotes)
         return {"inspirationalQuotes": quotes}
 
@@ -431,13 +460,14 @@ class Generator:
                 prompt itself will be used as the template. The template should
                 contain the word to generate images for as {word}.
         """
-        imagePrompts = await self._genTextField("dallePrompt", {"count": count})
+        imagePrompts = await self._genTextField("dallePrompt", {"count": count+2})
         imagePrompts = [
-            formatting.depunctuate(prompt.strip()[3:])
+            prompt.strip()[3:]
             for prompt in imagePrompts.split("\n")
         ]
+        imagePrompts = filter(bool, imagePrompts)
         if dalleTemplate:
-            imagePrompts = [prompt.format(word=self.word) for prompt in imagePrompts]
+            imagePrompts = [dalleTemplate.format(PROMPT=prompt) for prompt in imagePrompts]
 
         # fmt: off
         b64Images: list[str] = []
