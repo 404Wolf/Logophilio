@@ -111,7 +111,7 @@ class Flashcard:
         async with aiohttp.ClientSession() as session:
             yield Generator(self.word, session)
 
-    async def generate(
+    async def _generate(
         self,
         genFields: list[str] | None = None,
         genKwargs: dict[str, dict[str, object]] | None = None,
@@ -143,3 +143,15 @@ class Flashcard:
                         )
                     tasks.append(taskGroup.create_task(fieldGen()))
             # fmt: on
+
+    async def generate(self):
+        """
+        Generate all the needed fields for the flashcard.
+
+        Notes:
+            * This method clears the current fields of the flashcard.
+            * This method utilizes the styles' configuration for generation.
+        """
+        await self._generate(
+            genKwargs=self.style.config,
+        )
