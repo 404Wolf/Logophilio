@@ -1,29 +1,39 @@
 {
-    "synonyms": {
-        "count": 3,
-        "capitalize": true,
+    "size": {
+        "width": 126,
+        "height": 180
     },
-    "sentences": {
-        "count": 3,
-        "capitalize": true,
-        "punctuate": true
-    },
-    "definitions": {
-        "count": 3,
-        "capitalize": true,
-        "punctuate": true
-    },
-    "images": {
-        "count": 3,
-        "dalleTemplate": "Vibrant vector watercolor of {PROMPT}, easily comprehensible, orange background, center-focused"
-    },
-    "inspirationalQuotes": {
-        "count": 1,
-        "capitalize": true,
-        "punctuate": false
-    },
-    "rhyming": {
-        "count": 4,
-        "capitalize": true
+    "generation": {
+        "synonyms": {
+            "count": 3,
+            "capitalize": true
+        },
+        "sentences": {
+            "count": 3,
+            "capitalize": true,
+            "punctuate": true,
+            "boldTag": true
+        },
+        "definitions": {
+            "count": 3,
+            "capitalize": true,
+            "punctuate": true
+        },
+        "images": {
+            "count": 1,
+            "dalleTemplate": "Vibrant vector watercolor of {PROMPT}, easily comprehensible, orange background, center-focused"
+        },
+        "inspirationalQuotes": {
+            "count": 1,
+            "capitalize": true,
+            "punctuate": false
+        },
+        "rhyming": {
+            "count": 4,
+            "capitalize": true
+        },
+        "pronunciation": {
+            "lowercase": true
+        }
     }
 }
