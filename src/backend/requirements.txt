@@ -1,9 +1,0 @@
-jinja2
-openai
-selenium
-webdriver_manager
-pypdf
-aiohttp
-frozendict
-Unidecode
-django

@@ -1,20 +1,18 @@
 import asyncio
 import base64
 import io
-import json
 from contextlib import asynccontextmanager
-from typing import Iterable
 
 import aiohttp
 import jinja2
 from pypdf import PdfWriter
 
-from src.converter import convertToPdf
-from src.flashcards.generator import Generator
-from src.flashcards.graphics import icons
-from src.flashcards.styles.styles import Style
-from src.flashcards.utils.formatting import camelCaseToSnakeCase
-from src.flashcards.utils.misc import strAsBase64
+from ..converter import convertToPdf
+from .generator import Generator
+from .graphics import icons
+from .styles.styles import Style
+from .utils.formatting import camelCaseToSnakeCase
+from .utils.misc import strAsBase64
 
 fields = (
     "partOfSpeech",

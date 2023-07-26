@@ -1,0 +1,14 @@
+jinja2
+openai
+selenium
+webdriver_manager
+pypdf
+aiohttp
+frozendict
+Unidecode
+django
+django-cockroachdb
+psycopg
+psycopg2-binary
+django-s3direct
+python-dotenv

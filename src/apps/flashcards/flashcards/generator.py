@@ -4,10 +4,10 @@ import json
 import aiohttp
 from unidecode import unidecode
 
-from src import keys
-from src.flashcards.utils import formatting
-from src.flashcards.utils.openai import gptReq, dalleReq
-from src.flashcards.utils.structs import Image
+from src.keys import keys
+from .utils import formatting
+from .utils.openai import gptReq, dalleReq
+from .utils.structs import Image
 
 # fmt: off
 BASIC_WEBSTER_THESAURUS = "https://www.dictionaryapi.com/api/v3/references/thesaurus/json"
