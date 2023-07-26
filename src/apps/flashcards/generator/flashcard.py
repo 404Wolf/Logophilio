@@ -69,7 +69,7 @@ class Flashcard:
         bytes_stream = io.BytesIO()
         writer.write(bytes_stream)
         bytes_stream.seek(0)
-        return bytes_stream.read()
+        return bytes_stream
 
     def renderFront(self, **kwargs) -> str:
         """Render the front of the flashcard to a base-64 PDF."""

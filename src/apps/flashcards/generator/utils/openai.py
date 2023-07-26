@@ -1,10 +1,13 @@
-import aiohttp
+import os
 
-from src import keys
+import aiohttp
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CHAT_COMPLETIONS_API = "https://api.openai.com/v1/chat/completions"
 DALLE_API = "https://api.openai.com/v1/images/generations"
-
+OPENAI_KEY = os.getenv("OPENAI")
 
 class OpenAiApiReqError(Exception):
     """
@@ -28,7 +31,7 @@ async def gptReq(reqData: dict, session: aiohttp.ClientSession) -> str:
 
     async with session.post(
         CHAT_COMPLETIONS_API,
-        headers={"Authorization": f"Bearer {keys.OPENAI}"},
+        headers={"Authorization": f"Bearer {OPENAI_KEY}"},
         json=reqData,
     ) as resp:
         try:
@@ -51,7 +54,7 @@ async def dalleReq(reqData: dict, session: aiohttp.ClientSession) -> str:
 
     async with session.post(
         DALLE_API,
-        headers={"Authorization": f"Bearer {keys.OPENAI}"},
+        headers={"Authorization": f"Bearer {OPENAI_KEY}"},
         json=reqData,
     ) as resp:
         try:

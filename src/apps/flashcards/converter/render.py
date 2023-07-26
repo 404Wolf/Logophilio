@@ -1,4 +1,4 @@
-from src.converter.engine import webdriver_chrome
+from .engine import webdriver_chrome
 
 
 def convertToPdf(data: str, mimetype: str, width: int, height: int) -> str:

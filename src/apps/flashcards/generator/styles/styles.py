@@ -6,7 +6,7 @@ import jinja2
 __all__ = ("styles",)
 
 jinjaEnv = jinja2.Environment(
-    loader=jinja2.PackageLoader("flashcards", "styles"),
+    loader=jinja2.PackageLoader("apps.flashcards.generator", "styles"),
     autoescape=jinja2.select_autoescape(),
 )
 
@@ -41,7 +41,7 @@ class Style:
         Returns:
             The style.
         """
-        with open(f"flashcards/styles/{name}/config.json") as f:
+        with open(f"apps/flashcards/generator/styles/{name}/config.json") as f:
             styleConfig = json.load(f)
         return cls(
             name=name,

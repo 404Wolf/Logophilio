@@ -1,13 +1,16 @@
 import asyncio
 import json
+import os
+from dotenv import load_dotenv
 
 import aiohttp
 from unidecode import unidecode
 
-from src.keys import keys
 from .utils import formatting
 from .utils.openai import gptReq, dalleReq
 from .utils.structs import Image
+
+load_dotenv()
 
 # fmt: off
 BASIC_WEBSTER_THESAURUS = "https://www.dictionaryapi.com/api/v3/references/thesaurus/json"
@@ -17,7 +20,7 @@ RHYMEBRAIN_API = "https://rhymebrain.com/talk?function=getRhymes"
 DICTIONARY_API = "https://api.dictionaryapi.dev/api/v2/entries/en"
 # fmt: on
 
-with open("flashcards/prompts.json") as f:
+with open("apps/flashcards/generator/prompts.json") as f:
     aiPrompts = json.load(f)
 
 
@@ -179,7 +182,9 @@ class Generator:
         sentences = self._sentences[:count]
 
         if boldTag:
-            sentences = map(lambda text: formatting.embolden(text, self.word), sentences)
+            sentences = map(
+                lambda text: formatting.embolden(text, self.word), sentences
+            )
 
         if punctuate:
             sentences = map(formatting.punctuate, sentences)
@@ -292,7 +297,7 @@ class Generator:
     async def _fetchBasicThesaurusData(self):
         """Fetch data from the basic thesaurus API and store it."""
         fetchedData = await self._fetchThesaurusData(
-            BASIC_WEBSTER_THESAURUS, keys.BASIC_WEBSTER_THESAURUS
+            BASIC_WEBSTER_THESAURUS, os.getenv("BASIC_WEBSTER_THESAURUS")
         )
         self._basic_thesaurus_api_fetched = True
         return fetchedData
@@ -300,7 +305,7 @@ class Generator:
     async def _fetchAdvancedThesaurusData(self):
         """Fetch data from the advanced thesaurus API and store it."""
         fetchedData = await self._fetchThesaurusData(
-            ADVANCED_WEBSTER_THESAURUS, keys.ADVANCED_WEBSTER_THESAURUS
+            ADVANCED_WEBSTER_THESAURUS, os.getEnv("ADVANCED_WEBSTER_THESAURUS")
         )
         self._advanced_thesaurus_api_fetched = True
         return fetchedData
@@ -359,7 +364,7 @@ class Generator:
                     definitions.append(meaning["definition"].lower())
                     synonyms.extend(map(lambda item: item.lower(), meaning["synonyms"]))
                     antonyms.extend(map(lambda item: item.lower(), meaning["antonyms"]))
-                    if "example" in meaning and len(meaning["example"]).split(" ") < 14:
+                    if "example" in meaning and len(meaning["example"].split(" ")) < 14:
                         sentences.append(meaning["example"].lower())
 
         if origin:
@@ -460,14 +465,13 @@ class Generator:
                 prompt itself will be used as the template. The template should
                 contain the word to generate images for as {word}.
         """
-        imagePrompts = await self._genTextField("dallePrompt", {"count": count+2})
-        imagePrompts = [
-            prompt.strip()[3:]
-            for prompt in imagePrompts.split("\n")
-        ]
+        imagePrompts = await self._genTextField("dallePrompt", {"count": count + 2})
+        imagePrompts = [prompt.strip()[3:] for prompt in imagePrompts.split("\n")]
         imagePrompts = filter(bool, imagePrompts)
         if dalleTemplate:
-            imagePrompts = [dalleTemplate.format(PROMPT=prompt) for prompt in imagePrompts]
+            imagePrompts = [
+                dalleTemplate.format(PROMPT=prompt) for prompt in imagePrompts
+            ]
 
         # fmt: off
         b64Images: list[str] = []
