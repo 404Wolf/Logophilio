@@ -46,7 +46,7 @@ class Flashcard:
     def word(self) -> str:
         return self._word
 
-    def render(self, *args, **kwargs) -> bytes:
+    def render(self, *args, **kwargs) -> bytes | PdfWriter | io.BytesIO:
         """
         Render a flashcard to a PDF, and return the PDF as a bytes stream.
 
@@ -65,11 +65,19 @@ class Flashcard:
         writer = PdfWriter()
         writer.append(io.BytesIO(front))
         writer.append(io.BytesIO(back))
+        if kwargs.get("as_writer", False):
+            return writer
 
-        bytes_stream = io.BytesIO()
-        writer.write(bytes_stream)
-        bytes_stream.seek(0)
-        return bytes_stream
+        if kwargs.get("as_bytes_stream", True):
+            bytes_stream = io.BytesIO()
+            writer.write(bytes_stream)
+            bytes_stream.seek(0)
+            if kwargs.get("read_bytes_stream", True):
+                return bytes_stream.read()
+            else:
+                return bytes_stream
+
+        return writer
 
     def renderFront(self, **kwargs) -> str:
         """Render the front of the flashcard to a base-64 PDF."""
