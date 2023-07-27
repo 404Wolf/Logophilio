@@ -10,5 +10,9 @@ django
 django-cockroachdb
 psycopg
 psycopg2-binary
-django-s3direct
 python-dotenv
+django-storages
+boto3
+b2sdk
+Pillow
+adrf

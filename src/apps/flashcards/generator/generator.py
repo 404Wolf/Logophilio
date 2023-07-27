@@ -24,7 +24,7 @@ with open("apps/flashcards/generator/prompts.json") as f:
     aiPrompts = json.load(f)
 
 
-class Generator:
+class FlashcardGen:
     """
     A generator for flashcard fields.
 
