@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import boto3
+import openai
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -103,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# OpenAI
+openai.api_key = os.getenv("OPENAI")
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -132,10 +135,20 @@ LOGGING = {
         "console": {
             "class": "logging.StreamHandler",
         },
+        "null": {
+            "class": "logging.NullHandler",
+        },
     },
     "root": {
         "handlers": ["console"],
         "level": "DEBUG",
+    },
+    "loggers": {
+        "selenium": {
+            "handlers": ["null"],
+            "level": "ERROR",
+            "propagate": False,
+        },
     },
 }
 

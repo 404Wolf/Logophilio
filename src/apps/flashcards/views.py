@@ -1,14 +1,16 @@
 import random
+from base64 import b64decode, b64encode
 
-from asgiref.sync import sync_to_async, async_to_sync
+from django.core.files.base import ContentFile
 from rest_framework.request import Request
 from rest_framework.response import Response
-from adrf.views import APIView as AsyncAPIView
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
 
+from .serializers import FlashcardSerializer
 from ..flashcards.models import FlashcardStyle, Flashcard
 from ..words.models import Word, WordImage
+from ..words.serializers import WordImageSerializer
 
 
 class Generate(APIView):
@@ -21,22 +23,33 @@ class Generate(APIView):
             style = random.choice(FlashcardStyle.objects.all())
 
         try:
-            word = Word.objects.get(word=word)
+            word = Word.objects.get(word=word.lower())
         except ObjectDoesNotExist:
-            word = async_to_sync(Word.generated)(word)
+            word = Word.generated(word.lower())
+            word.save()
 
         images = list(WordImage.objects.filter(word=word))
         while len(images) < 2:
-            images.append(
-                async_to_sync(WordImage.generated)(word, style.frontImageConfig)
-            )
+            images.append(image := WordImage.generated(word, style.imageConfig))
+            image.save()
 
         flashcard = Flashcard(
             word=word,
             style=style,
         )
-        flashcard.front = flashcard.rendered(style.template("front"), images)
-        flashcard.front = flashcard.rendered(style.template("back"), images)
+        flashcard.front = ContentFile(
+            b64decode(flashcard.rendered(style.template("front"), [images[0]])),
+            name="front.pdf",
+        )
+        flashcard.back = ContentFile(
+            b64decode(flashcard.rendered(style.template("back"), [images[1]])),
+            name="back.pdf",
+        )
         flashcard.save()
 
-        return Response({flashcard: flashcard})
+        return Response(
+            {
+                "flashcard": FlashcardSerializer(flashcard).data,
+                "images": [WordImageSerializer(image).data for image in images],
+            }
+        )

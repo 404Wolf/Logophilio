@@ -11,7 +11,7 @@ class WordSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class WordImageSerializer(serializers.Serializer):
+class WordImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = WordImageModel
         fields = '__all__'

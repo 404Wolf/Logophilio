@@ -52,7 +52,7 @@ async def dalleReq(reqData: dict, session: aiohttp.ClientSession) -> str:
     Returns:
         The generated image.
     """
-
+    reqData["response_format"] = "b64_json"
     async with session.post(
         DALLE_API,
         headers={"Authorization": f"Bearer {OPENAI_KEY}"},

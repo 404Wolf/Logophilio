@@ -16,3 +16,4 @@ boto3
 b2sdk
 Pillow
 adrf
+django-extensions

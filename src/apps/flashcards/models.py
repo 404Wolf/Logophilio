@@ -21,8 +21,7 @@ class FlashcardStyle(models.Model):
     back = models.FileField(validators=[validate_style_filetype], null=True)
     width = models.IntegerField()
     height = models.IntegerField()
-    frontImageConfig = models.ForeignKey("words.WordImageConfig", on_delete=models.SET_NULL, null=True, related_name="frontImageConfig")
-    backImageConfig = models.ForeignKey("words.WordImageConfig", on_delete=models.SET_NULL, null=True, related_name="backImageConfig")
+    imageConfig = models.ForeignKey("words.WordImageConfig", on_delete=models.SET_NULL, null=True, related_name="backImageConfig")
     # fmt:on
 
     @cache
@@ -42,10 +41,18 @@ class Flashcard(models.Model):
         self,
         template: jinja2.Template,
         images: list[WordImage],
-        **kwargs,
+        fields: tuple[tuple[str, list[str] | str]] = ()
     ) -> str:
         """Slot flashcard data into a SVG template."""
-        templateFields = {**kwargs, "WORD_1": self.word.word}
+        templateFields = {"WORD_1": self.word.word}
+        imageB64s = []
+        for image in images:
+            with image.image.open("rb") as imageData:
+                imageB64s.append(base64.b64encode(imageData.read()).decode("ascii"))
+        imageB64s = [f"data:image/png;base64,{imageB64}" for imageB64 in imageB64s]
+
+        print("popcorns")
+        print(len(images))
         for fieldName, value in (
             ("WORD", self.word.word),
             ("PART_OF_SPEECH", self.word.partOfSpeech),
@@ -57,7 +64,8 @@ class Flashcard(models.Model):
             ("DEFINITIONS", self.word.definitions),
             ("INSPIRATIONAL_QUOTES", self.word.inspirationalQuotes),
             ("RHYMES", self.word.rhymes),
-            ("IMAGES", images),
+            ("IMAGES", imageB64s),
+            *fields
         ):
             if isinstance(value, list):
                 for i, item in enumerate(value, start=1):

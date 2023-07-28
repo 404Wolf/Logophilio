@@ -1,5 +1,5 @@
 import base64
-
+from io import FileIO
 
 def fileAsBase64(path: str) -> str:
     """

@@ -165,7 +165,7 @@ class WordDataGenerator:
     async def _fetchAdvancedThesaurusData(self):
         """Fetch data from the advanced thesaurus API and store it."""
         fetchedData = await self._fetchThesaurusData(
-            ADVANCED_WEBSTER_THESAURUS, os.getEnv("ADVANCED_WEBSTER_THESAURUS")
+            ADVANCED_WEBSTER_THESAURUS, os.getenv("ADVANCED_WEBSTER_THESAURUS")
         )
         self._advanced_thesaurus_api_fetched = True
         return fetchedData
@@ -182,8 +182,12 @@ class WordDataGenerator:
             f"{apiUrl}/{self.word}", params={"key": key}
         ) as resp:
             data = await resp.json()
-            synonyms = [synonym.lower() for synonym in data[0]["meta"]["syns"][0]]
-            antonyms = [antonym.lower() for antonym in data[0]["meta"]["ants"][0]]
+            synonyms = data[0]["meta"]["syns"]
+            if len(synonyms) > 0:
+                synonyms = [synonym.lower() for synonym in synonyms[0]]
+            antonyms = data[0]["meta"]["ants"]
+            if len(antonyms) > 0:
+                antonyms = [antonym.lower() for antonym in antonyms[0]]
             self._synonyms.extend(synonyms)
             self._antonyms.extend(antonyms)
         return {"synonyms": synonyms, "antonyms": antonyms}
@@ -301,7 +305,7 @@ class WordDataGenerator:
         quotes = await self._genTextField("inspirationalQuotes", {"count": count})
         quotes = quotes.split("\n")
         for i, quote in enumerate(quotes):
-            quote = quote.strip()[4:-1].replace(". \"", "")
+            quote = quote.strip()[4:-1].replace('. "', "")
             if not quote.endswith("."):
                 quote += "."
             quotes[i] = quote
