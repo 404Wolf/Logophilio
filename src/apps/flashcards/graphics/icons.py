@@ -17,12 +17,12 @@ class Icon:
         return f"data:image/svg+xml;base64,{self.base64}"
 
 
-with open("apps/flashcards/generator/graphics/icons/icons.json") as f:
+with open("apps/flashcards/graphics/icons/icons.json") as f:
     icons = {
         icon: Icon(
             name=icon,
-            path=f"apps/flashcards/generator/graphics/icons/{icon}.svg",
-            base64=fileAsBase64(f"apps/flashcards/generator/graphics/icons/{icon}.svg"),
+            path=f"apps/flashcards/generator/icons/{icon}.svg",
+            base64=fileAsBase64(f"apps/flashcards/graphics/icons/{icon}.svg"),
         )
         for icon in json.load(f)
     }

@@ -28,16 +28,17 @@ async def gptReq(reqData: dict, session: aiohttp.ClientSession) -> str:
     Returns:
         The generated text.
     """
-
-    async with session.post(
-        CHAT_COMPLETIONS_API,
-        headers={"Authorization": f"Bearer {OPENAI_KEY}"},
-        json=reqData,
-    ) as resp:
-        try:
-            return (await resp.json())["choices"][0]["message"]["content"]
-        except KeyError:
-            raise OpenAiApiReqError(await resp.text())
+    for attempt in range(6):
+        async with session.post(
+            CHAT_COMPLETIONS_API,
+            headers={"Authorization": f"Bearer {OPENAI_KEY}"},
+            json=reqData,
+        ) as resp:
+            try:
+                return (await resp.json())["choices"][0]["message"]["content"]
+            except KeyError:
+                if attempt < 10:
+                    raise OpenAiApiReqError(await resp.text())
 
 
 async def dalleReq(reqData: dict, session: aiohttp.ClientSession) -> str:

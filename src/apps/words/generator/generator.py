@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 import aiohttp
 from unidecode import unidecode
 
-from .utils import formatting
-from .utils.openai import gptReq, dalleReq
-from .utils.structs import Image
+from ..utils import formatting
+from ..utils.openai import gptReq
 
 load_dotenv()
 
@@ -20,13 +19,13 @@ RHYMEBRAIN_API = "https://rhymebrain.com/talk?function=getRhymes"
 DICTIONARY_API = "https://api.dictionaryapi.dev/api/v2/entries/en"
 # fmt: on
 
-with open("apps/flashcards/generator/prompts.json") as f:
+with open("apps/words/generator/prompts.json") as f:
     aiPrompts = json.load(f)
 
 
-class FlashcardGen:
+class WordDataGenerator:
     """
-    A generator for flashcard fields.
+    A generator for various parts of data about a english word.
 
     Methods:
         partOfSpeech: The part of speech of the word.
@@ -62,65 +61,23 @@ class FlashcardGen:
         self._rhyming_api2_fetched = False
         self._dictionary_api_fetched = False
 
-    async def partOfSpeech(self, abbreviate: bool = False):
-        """
-        The part of speech of the word
-
-        Args:
-            abbreviate: Whether to abbreviate the part of speech of the word.
-
-        Returns:
-            The part of speech of the    word
-        """
+    async def partOfSpeech(self):
+        """Part of speech of the word"""
         if not self._partOfSpeech:
             await self._genPartOfSpeech()
         partOfSpeech = self._partOfSpeech.lower()
-        if abbreviate:
-            return {
-                "noun": "noun",
-                "verb": "verb",
-                "adjective": "adj",
-                "adverb": "adv",
-                "pronoun": "pron",
-                "preposition": "prep",
-                "conjunction": "conj",
-                "interjection": "interj",
-                "abbreviation": "abbr",
-            }[partOfSpeech]
-        else:
-            return partOfSpeech
+        return partOfSpeech
 
-    async def pronunciation(self, lowercase: bool = False):
-        """
-        The pronunciation of the word.
-
-        Args:
-            lowercase: Whether to lowercase the pronunciation of the word. This will
-                remove capitalization meant to indicate emphasis.
-
-        Returns:
-            The pronunciation of the word.
-        """
+    async def pronunciation(self):
+        """Pronunciation of the word."""
         if not self._pronunciation:
             await self._genPronunciation()
 
         pronunciation = unidecode(self._pronunciation)
-        if lowercase:
-            return pronunciation.lower()
-        else:
-            return pronunciation
+        return pronunciation.lower()
 
-    async def synonyms(self, count: int = 1, capitalize: bool = False):
-        """
-        Synonyms of the word.
-
-        Args:
-            count: The minimum number of synonyms to return.
-            capitalize: Whether to capitalize the synonyms.
-
-        Returns:
-            Synonyms of the word.
-        """
+    async def synonyms(self, count: int = 8):
+        """Synonyms of the word."""
         if not self._synonyms:
             if not self._basic_thesaurus_api_fetched:
                 await self._fetchBasicThesaurusData()
@@ -130,22 +87,11 @@ class FlashcardGen:
         if not self._synonyms or len(self._synonyms) < count:
             synonymCount = len(self._synonyms) if self._synonyms is not None else 0
             await self._genSynonyms(count - synonymCount)
+        synonyms = filter(lambda synonym: "-" not in synonym, self._synonyms)
+        return list(synonyms)[:count]
 
-        if capitalize:
-            return [formatting.capitalize(syn) for syn in self._synonyms]
-
-        return self._synonyms
-
-    async def antonyms(self, count: int = 1):
-        """
-        Antonyms of the word.
-
-        Args:
-            count: The number of antonyms to return.
-
-        Returns:
-            Antonyms of the word.
-        """
+    async def antonyms(self, count: int = 8):
+        """Antonyms of the word."""
         if not self._antonyms:
             if not self._basic_thesaurus_api_fetched:
                 await self._fetchBasicThesaurusData()
@@ -154,135 +100,49 @@ class FlashcardGen:
                 await self._fetchAdvancedThesaurusData()
         if not self._antonyms or len(self._antonyms) < count:
             await self._genAntonyms(count - len(self._antonyms))
-        return self._antonyms
+        return self._antonyms[:count]
 
     async def sentences(
         self,
-        count: int = 1,
-        boldTag: bool = False,
-        capitalize: bool = False,
-        punctuate: bool = False,
+        count: int = 8,
     ):
-        """
-        Sentences using the word.
-
-        Args:
-            count: The number of sentences to return.
-            boldTag: Whether to bold the word in the sentences.
-            capitalize: Whether to capitalize the sentences.
-            punctuate: Whether to punctuate the sentences.
-
-        Returns:
-            Sentences using the word.
-        """
+        """Sentences using the word."""
         if not self._sentences:
             await self._fetchDictionaryData()
-        if len(self._sentences) < count:
+        sentences = self._sentences
+        while len(sentences) < count:
             await self._genSentences(count - len(self._sentences))
-        sentences = self._sentences[:count]
+            sentences = filter(lambda sentence: len(sentence) > 10, self._sentences)
+            sentences = list(sentences)
+        for i, sentence in enumerate(sentences):
+            if not sentence.endswith("."):
+                sentence += "."
+            sentence = sentence[0].upper() + sentence[1:]
+            sentences[i] = sentence
+        self._sentences = sentences
+        return sentences[:count]
 
-        if boldTag:
-            sentences = map(
-                lambda text: formatting.embolden(text, self.word), sentences
-            )
-
-        if punctuate:
-            sentences = map(formatting.punctuate, sentences)
-        else:
-            sentences = map(formatting.depunctuate, sentences)
-
-        if capitalize:
-            sentences = map(formatting.capitalize, sentences)
-
-        return list(sentences)
-
-    async def definitions(
-        self,
-        count: int = 1,
-        punctuate: bool = False,
-        capitalize: bool = False,
-    ):
-        """
-        Definitions of the word.
-
-        Args:
-            count: The number of definitions to return.
-            punctuate: Whether to punctuate the definitions.
-            capitaize: Whether to capitalize the definitions.
-        """
+    async def definitions(self, count: int = 8):
+        """Definitions of the word."""
         if not self._definitions:
             await self._fetchDictionaryData()
         if len(self._definitions) < count:
             await self._genDefinitions(count - len(self._definitions))
-        definitions = self._definitions[:count]
+        return self._definitions[:count]
 
-        if punctuate:
-            definitions = map(formatting.punctuate, definitions)
-        else:
-            definitions = map(formatting.depunctuate, definitions)
-
-        if capitalize:
-            definitions = map(formatting.capitalize, definitions)
-
-        return list(definitions)
-
-    async def inspirationalQuotes(
-        self,
-        count: int = 1,
-        capitalize: bool = False,
-        punctuate: bool = False,
-    ):
-        """
-        Inspirational quotes that use the word.
-
-        Args:
-            count: The number of inspirational quotes to return.
-            capitalize: Whether to capitalize the inspirational quotes.
-            punctuate: Whether to punctuate the inspirational quotes.
-        """
+    async def inspirationalQuotes(self, count: int = 6):
+        """Inspirational quotes that use the word."""
         if not self._inspirationalQuotes:
             await self._genInspirationalQuotes(count)
+        return self._inspirationalQuotes[:count]
 
-        inspirationalQuotes = self._inspirationalQuotes[:count]
-        if capitalize:
-            inspirationalQuotes = map(formatting.capitalize, inspirationalQuotes)
-
-        if punctuate:
-            inspirationalQuotes = map(formatting.punctuate, inspirationalQuotes)
-
-        return list(inspirationalQuotes)
-
-    async def rhymes(self, count: int = 1):
-        """
-        Words that rhyme with the word.
-
-        Args:
-            count: The number of rhymes to return.
-        """
+    async def rhymes(self, count: int = 6):
+        """Words that rhyme with the word."""
         if not self._rhymes:
             await self._genRhymes(count)
         else:
             self._rhymes.extend(await self._genRhymes(count - len(self._rhymes)))
         return self._rhymes
-
-    async def images(self, count: int = 1, dalleTemplate=None):
-        """
-        Images that relate to the word.
-
-        Args:
-            count: The number of images to return.
-            dalleTemplate: The template to use for DALL-E images. If None, the prompt
-                will be generated automatically and used alone. If a string with a
-                single {prompt} placeholder, the prompt will be generated automatically
-                generated and slotted into the template.
-        """
-        if not self._images:
-            await self._genImages(count, dalleTemplate=dalleTemplate)
-        if len(self._images) < count:
-            await self._genImages(
-                count - len(self._images), dalleTemplate=dalleTemplate
-            )
-        return self._images[:count]
 
     async def offensive(self) -> bool:
         """Whether the word is offensive or not."""
@@ -405,7 +265,7 @@ class FlashcardGen:
 
     async def _genRhymes(self, count: int):
         """Generate rhyming words using GPT."""
-        rhymes = await self._genTextField("rhyming", {"count": count})
+        rhymes = await self._genTextField("rhymes", {"count": count})
         rhymes = [rhyme.strip() for rhyme in rhymes.split("\n")]
         rhymes = filter(lambda rhyme: rhyme != self.word, rhymes)
         rhymes = map(lambda rhyme: rhyme.lower(), rhymes)
@@ -439,7 +299,13 @@ class FlashcardGen:
     async def _genInspirationalQuotes(self, count: int = 1):
         """Generate inspirational quote(s) using GPT."""
         quotes = await self._genTextField("inspirationalQuotes", {"count": count})
-        quotes = [quote.strip()[1:-1] for quote in quotes.split("\n")]
+        quotes = quotes.split("\n")
+        for i, quote in enumerate(quotes):
+            quote = quote.strip()[4:-1].replace(". \"", "")
+            if not quote.endswith("."):
+                quote += "."
+            quotes[i] = quote
+        quotes = filter(lambda quote: len(quote) > 15, quotes)
         self._inspirationalQuotes.extend(quotes)
         return {"inspirationalQuotes": quotes}
 
@@ -454,50 +320,6 @@ class FlashcardGen:
         offensive = offensive.lower()
         self._offensive = "yes" in offensive
         return {"offensive": self._offensive}
-
-    async def _genImages(self, count: int = 1, dalleTemplate: str = None) -> list[str]:
-        """
-        Generate images representing the word with DALLE.
-
-        Args:
-            count: The number of images to generate.
-            dalleTemplate: The template to use for generating images. If None, the
-                prompt itself will be used as the template. The template should
-                contain the word to generate images for as {word}.
-        """
-        imagePrompts = await self._genTextField("dallePrompt", {"count": count + 2})
-        imagePrompts = [prompt.strip()[3:] for prompt in imagePrompts.split("\n")]
-        imagePrompts = filter(bool, imagePrompts)
-        if dalleTemplate:
-            imagePrompts = [
-                dalleTemplate.format(PROMPT=prompt) for prompt in imagePrompts
-            ]
-
-        # fmt: off
-        b64Images: list[str] = []
-        async with asyncio.TaskGroup() as taskGroup:
-            for imagePrompt in imagePrompts:
-                async def imageGen():
-                    dalleData = await dalleReq(
-                        {
-                            "prompt": imagePrompt,
-                            "n": 1,
-                            "size": "1024x1024",
-                            "response_format": "b64_json",
-                        },
-                        self.session,
-                    )
-                    b64Images.append(dalleData)
-                taskGroup.create_task(imageGen())
-        # fmt: on
-
-        images = []
-        for i, image in enumerate(b64Images):
-            image = Image(image, (1024, 1024), imagePrompts[i], dalleTemplate)
-            images.append(image)
-
-        self._images.extend(images)
-        return {"images": images}
 
     async def _genTextField(self, field: str, placeholders: dict = None):
         """

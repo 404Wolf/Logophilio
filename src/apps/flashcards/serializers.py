@@ -1,28 +1,19 @@
 from rest_framework import serializers
 
-from src.apps.flashcards.models import (
+from .models import (
     FlashcardStyle as FlashcardStyleModel,
-    Flashcard as FlashcardModel,
-    Word as WordModel,
-    WordImage as WordImageModel,
+    Flashcard as FlashcardModel
 )
 
 
 class FlashcardStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = FlashcardStyleModel
+        fields = '__all__'
 
 
 class FlashcardSerializer(serializers.ModelSerializer):
     class Meta:
         model = FlashcardModel
+        fields = '__all__'
 
-
-class WordSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WordModel
-
-
-class WordImageSerializer(serializers.Serializer):
-    class Meta:
-        model = WordImageModel

@@ -1,11 +1,4 @@
 {
-	"dallePrompt": {
-		"model": "gpt-3.5-turbo",
-		"messages": [{
-			"role": "user",
-			"content": "Provide {count} brief, different bits of imagery that capture a common occurrence of \"{word}\" These descriptions should: - NOT use the word \"{word}.\"\n- NOT involve humans.\n- BE 300 characters or less."
-		}]
-	},
 	"partOfSpeech": {
 		"model": "gpt-3.5-turbo",
 		"messages": [{
@@ -128,7 +121,7 @@
 			},
 			{
 				"role": "user",
-				"content": "Give me {count} inspirational quotes using the word {word}, separated by newlines."
+				"content": "Give me {count} inspirational quotes using the word {word}, separated by newlines. Important: each line should have the quote with no prefix, quotes, numbering, or any other filler."
 			}
 		],
 		"max_tokens": 90,
@@ -152,8 +145,8 @@
 		"presence_penalty": 0.4,
 		"frequency_penalty": 0.6
 	},
-	"rhyming": {
-		"model": "gpt-3.5-turbo",
+	"rhymes": {
+		"model": "gpt-4",
 		"messages": [{
 				"role": "system",
 				"content": "You are a musician who is very good at rhyming words, and follows instructions concisely and well."

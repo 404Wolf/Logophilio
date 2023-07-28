@@ -33,8 +33,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "apps.words",
     "apps.flashcards",
     "rest_framework",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -76,8 +78,8 @@ DATABASES = {
         "ENGINE": "django_cockroachdb",
         "NAME": "defaultdb",
         "USER": "wolf",
-        "PASSWORD": "CyRsk58Z6R2GARP4io1bdA",
-        "HOST": "logophilio-4720.g8z.cockroachlabs.cloud",
+        "PASSWORD": os.getenv("COCKROACH_DB_PASSWORD"),
+        "HOST": "logophilio-4756.g8z.cockroachlabs.cloud",
         "PORT": "26257",
         "OPTIONS": {"sslmode": "verify-full"},
     },

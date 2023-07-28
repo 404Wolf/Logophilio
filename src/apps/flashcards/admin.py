@@ -1,7 +1,5 @@
 from django.contrib import admin
-from .models import Flashcard, FlashcardStyle, Word, WordImage
+from .models import Flashcard, FlashcardStyle
 
 admin.site.register(Flashcard)
 admin.site.register(FlashcardStyle)
-admin.site.register(Word)
-admin.site.register(WordImage)
