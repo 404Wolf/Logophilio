@@ -1,6 +1,7 @@
 import asyncio
 import base64
-from types import SimpleNamespace
+from types import SimpleNamespace, FunctionType
+from typing import Coroutine
 from uuid import uuid1
 
 import aiohttp
@@ -9,6 +10,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.files.base import ContentFile
 from django.db import models
 
+from .generator.fields import fields
 from .generator.generator import WordDataGenerator
 from .utils.openai import gptReq, dalleReq
 
@@ -34,28 +36,20 @@ class Word(models.Model):
     notes = models.TextField(null=True)
 
     @classmethod
-    def generated(cls, word: str):
+    def generated(cls, word: str, genKwargs: dict[str, dict[str, object]] = None):
         async def _generate_word():
             async with aiohttp.ClientSession() as session:
                 async with asyncio.TaskGroup() as taskGroup:
                     generator = WordDataGenerator(word, session)
-                    # fmt:off
-                    wordData = {
-                        "word": word,
-                        "partOfSpeech": taskGroup.create_task(generator.partOfSpeech()),
-                        "pronunciation": taskGroup.create_task(generator.pronunciation()),
-                        "offensive": taskGroup.create_task(generator.offensive()),
-                        "synonyms": taskGroup.create_task(generator.synonyms()),
-                        "antonyms": taskGroup.create_task(generator.antonyms()),
-                        "sentences": taskGroup.create_task(generator.sentences()),
-                        "definitions": taskGroup.create_task(generator.definitions()),
-                        "inspirationalQuotes": taskGroup.create_task(generator.inspirationalQuotes()),
-                        "rhymes": taskGroup.create_task(generator.rhymes()),
-                    }
-                    # fmt:on
-            for key, value in wordData.items():
-                if isinstance(value, asyncio.Task):
-                    wordData[key] = value.result()
+                    wordData = {"word": word}
+                    for field in fields:
+                        genMethod = getattr(generator, field)
+                        if callable(genMethod):
+                            kwargs = genKwargs.get(field, {}) if genKwargs else {}
+                            wordData[field] = taskGroup.create_task(genMethod(**kwargs))
+            for field, worker in wordData.items():
+                if isinstance(worker, asyncio.Task):
+                    wordData[field] = worker.result()
             return wordData
 
         return cls(**asyncio.run(_generate_word()))
@@ -84,6 +78,7 @@ class WordImage(models.Model):
             max_tokens=100,
         )
         imagePrompt = imagePrompt["choices"][0]["message"]["content"]
+        imagePrompt = imagePrompt.split("\n")[0][3:]
         imagePrompt = config.template.format(prompt=imagePrompt)
 
         imageB64 = openai.Image.create(
@@ -102,5 +97,5 @@ class WordImage(models.Model):
                 base64.b64decode(imageB64.encode("ascii")), name=f"{str(uuid1())}.png"
             ),
             prompt=imagePrompt,
-            config=config
+            config=config,
         )

@@ -1,8 +1,6 @@
 from base64 import b64decode
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from uuid import uuid1
 
-from botocore.docs.bcdoc import style
 from django.core.files.base import ContentFile
 
 from ..flashcards.models import Flashcard, FlashcardStyle
@@ -26,14 +24,13 @@ def generateImages(
     assert isinstance(
         word, Word
     ), f"Image generation requires a Word model instance; got {type(word)}"
-    images = list(WordImage.objects.filter(word=word))
-    with ThreadPoolExecutor() as executor:
-        imageCreators = []
-        for i in range(count - len(images)):
-            imageCreators.append(executor.submit(WordImage.generated, word, imgConfig))
-        for imageCreator in as_completed(imageCreators):
-            image = imageCreator.result()
-            images.append(image)
+    images = list(WordImage.objects.filter(word=word, config=imgConfig))
+
+    for i in range(count - len(images)):
+        image = WordImage.generated(word, imgConfig)
+        image.save()
+        images.append(image)
+
     return images
 
 
@@ -55,21 +52,21 @@ def generateFlashcard(
     assert isinstance(
         word, Word
     ), f"Flashcard generation requires a Word model instance; got {type(word)}."
+
     frontImgCount = style.imgCount("front")
     flashcard = Flashcard(
         word=word,
         style=style,
     )
-    flashcard.front = ContentFile(
-        b64decode(
-            flashcard.rendered(style.template("front"), images[:frontImgCount])
-        ),
-        name=f"{str(uuid1())}.pdf",
+
+    renderedFront = b64decode(
+        flashcard.rendered(style.template("front"), images[:frontImgCount])
     )
-    flashcard.back = ContentFile(
-        b64decode(
-            flashcard.rendered(style.template("back"), images[frontImgCount:])
-        ),
-        name=f"{str(uuid1())}.pdf",
+    flashcard.front = ContentFile(renderedFront, f"{str(uuid1())}.pdf")
+    renderedBack = b64decode(
+        flashcard.rendered(style.template("back"), images[frontImgCount:])
     )
+    flashcard.back = ContentFile(renderedBack, f"{str(uuid1())}.pdf")
+
+    flashcard.save()
     return flashcard

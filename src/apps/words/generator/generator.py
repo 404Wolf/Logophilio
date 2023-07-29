@@ -1,6 +1,8 @@
 import asyncio
 import json
 import os
+from contextlib import suppress
+
 from dotenv import load_dotenv
 
 import aiohttp
@@ -88,6 +90,7 @@ class WordDataGenerator:
             synonymCount = len(self._synonyms) if self._synonyms is not None else 0
             await self._genSynonyms(count - synonymCount)
         synonyms = filter(lambda synonym: "-" not in synonym, self._synonyms)
+        synonyms = filter(lambda synonym: len(synonym) < 12, synonyms)
         return list(synonyms)[:count]
 
     async def antonyms(self, count: int = 8):
@@ -178,19 +181,22 @@ class WordDataGenerator:
             apiUrl: The URL of the thesaurus API.
             key: The API key for the specific thesaurus API.
         """
-        async with self.session.get(
-            f"{apiUrl}/{self.word}", params={"key": key}
-        ) as resp:
-            data = await resp.json()
-            synonyms = data[0]["meta"]["syns"]
-            if len(synonyms) > 0:
-                synonyms = [synonym.lower() for synonym in synonyms[0]]
-            antonyms = data[0]["meta"]["ants"]
-            if len(antonyms) > 0:
-                antonyms = [antonym.lower() for antonym in antonyms[0]]
-            self._synonyms.extend(synonyms)
-            self._antonyms.extend(antonyms)
-        return {"synonyms": synonyms, "antonyms": antonyms}
+        try:
+            async with self.session.get(
+                f"{apiUrl}/{self.word}", params={"key": key}
+            ) as resp:
+                data = await resp.json()
+                synonyms = data[0]["meta"]["syns"]
+                if len(synonyms) > 0:
+                    synonyms = [synonym.lower() for synonym in synonyms[0]]
+                antonyms = data[0]["meta"]["ants"]
+                if len(antonyms) > 0:
+                    antonyms = [antonym.lower() for antonym in antonyms[0]]
+                self._synonyms.extend(synonyms)
+                self._antonyms.extend(antonyms)
+            return {"synonyms": synonyms, "antonyms": antonyms}
+        except IndexError:
+            return {"synonyms": [], "antonyms": []}
 
     async def _fetchRhymezoneData(self):
         """Fetch rhyming words with RhymeZone API."""
@@ -219,35 +225,45 @@ class WordDataGenerator:
         synonyms = []
         antonyms = []
         async with self.session.get(f"{DICTIONARY_API}/{self.word}") as resp:
-            data = (await resp.json())[0]
-            if "origin" in data:
-                origin = data["origin"].lower()
-            partOfSpeech = data["meanings"][0]["partOfSpeech"].lower()
-            for entry in data["meanings"]:
-                for meaning in entry["definitions"]:
-                    definitions.append(meaning["definition"].lower())
-                    synonyms.extend(map(lambda item: item.lower(), meaning["synonyms"]))
-                    antonyms.extend(map(lambda item: item.lower(), meaning["antonyms"]))
-                    if "example" in meaning and len(meaning["example"].split(" ")) < 14:
-                        sentences.append(meaning["example"].lower())
+            try:
+                data = (await resp.json())[0]
+                if "origin" in data:
+                    origin = data["origin"].lower()
+                partOfSpeech = data["meanings"][0]["partOfSpeech"].lower()
+                for entry in data["meanings"]:
+                    for meaning in entry["definitions"]:
+                        definitions.append(meaning["definition"].lower())
+                        synonyms.extend(map(lambda item: item.lower(), meaning["synonyms"]))
+                        antonyms.extend(map(lambda item: item.lower(), meaning["antonyms"]))
+                        if "example" in meaning and len(meaning["example"].split(" ")) < 14:
+                            sentences.append(meaning["example"].lower())
 
-        if origin:
-            self._origin = origin
-        self._partOfSpeech = partOfSpeech
-        self._definitions.extend(definitions)
-        self._sentences.extend(sentences)
-        self._synonyms.extend(synonyms)
-        self._antonyms.extend(antonyms)
-        self._dictionary_api_fetched = True
+                if origin:
+                    self._origin = origin
+                self._partOfSpeech = partOfSpeech
+                self._definitions.extend(definitions)
+                self._sentences.extend(sentences)
+                self._synonyms.extend(synonyms)
+                self._antonyms.extend(antonyms)
+                self._dictionary_api_fetched = True
 
-        return {
-            "origin": origin,
-            "partOfSpeech": partOfSpeech,
-            "definitions": definitions,
-            "sentences": sentences,
-            "synonyms": synonyms,
-            "antonyms": antonyms,
-        }
+                return {
+                    "origin": origin,
+                    "partOfSpeech": partOfSpeech,
+                    "definitions": definitions,
+                    "sentences": sentences,
+                    "synonyms": synonyms,
+                    "antonyms": antonyms,
+                }
+            except KeyError:
+                return {
+                    "origin": None,
+                    "partOfSpeech": None,
+                    "definitions": [],
+                    "sentences": [],
+                    "synonyms": [],
+                    "antonyms": [],
+                }
 
     async def _genSynonyms(self, count: int):
         """Generate synonyms using GPT."""
