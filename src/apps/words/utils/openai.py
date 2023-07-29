@@ -37,7 +37,7 @@ async def gptReq(reqData: dict, session: aiohttp.ClientSession) -> str:
             try:
                 return (await resp.json())["choices"][0]["message"]["content"]
             except KeyError:
-                if attempt < 10:
+                if attempt > 10:
                     raise OpenAiApiReqError(await resp.text())
 
 

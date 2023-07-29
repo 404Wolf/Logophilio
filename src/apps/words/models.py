@@ -21,7 +21,7 @@ class WordImageConfig(models.Model):
 
 
 class Word(models.Model):
-    word = models.CharField(max_length=50, unique=True, primary_key=True)
+    word = models.CharField(max_length=50)
     partOfSpeech = models.CharField(max_length=20)
     pronunciation = models.CharField(max_length=100)
     offensive = models.BooleanField(default=False)
@@ -68,7 +68,7 @@ class WordImage(models.Model):
     notes = models.TextField(null=True)
     image = models.ImageField(null=True)
     config = models.ForeignKey(WordImageConfig, null=True, on_delete=models.SET_NULL)
-    prompt = models.CharField(max_length=400, null=True)
+    prompt = models.TextField(null=True)
 
     @classmethod
     def generated(cls, word: Word, config: WordImageConfig):

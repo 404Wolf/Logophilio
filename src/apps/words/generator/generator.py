@@ -298,6 +298,8 @@ class WordDataGenerator:
     async def _genPartOfSpeech(self):
         """Generate word part of speech using GPT."""
         self._partOfSpeech = (await self._genTextField("partOfSpeech")).lower()
+        if self._partOfSpeech.endswith("."):
+            self._partOfSpeech = self._partOfSpeech[:-1]
         return {"partOfSpeech": self._partOfSpeech}
 
     async def _genInspirationalQuotes(self, count: int = 1):

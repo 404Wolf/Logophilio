@@ -21,14 +21,25 @@ class FlashcardStyle(models.Model):
     back = models.FileField(validators=[validate_style_filetype], null=True)
     width = models.IntegerField()
     height = models.IntegerField()
-    imageConfig = models.ForeignKey("words.WordImageConfig", on_delete=models.SET_NULL, null=True, related_name="backImageConfig")
+    imgConfig = models.ForeignKey("words.WordImageConfig", on_delete=models.SET_NULL, null=True, related_name="backImageConfig")
     # fmt:on
 
     @cache
-    def template(self, side: Literal["front", "back"]):
+    def templateStr(self, side: Literal["front", "back"]):
         with getattr(self, side).open(mode="r") as templateStr:
-            templateStr = templateStr.read()
-            return jinja2.Environment().from_string(templateStr)
+            return templateStr.read()
+
+    @cache
+    def template(self, side: Literal["front", "back"]):
+        return jinja2.Environment().from_string(self.templateStr(side))
+
+    def imgCount(self, side: Literal["front", "back"] = None):
+        if side is None:
+            count = 0
+            for side in ("front", "back"):
+                count += self.templateStr(side).count(r"{{ IMAGES_")
+            return count
+        return self.templateStr(side).count(r"{{ IMAGES_")
 
 
 class Flashcard(models.Model):
@@ -44,6 +55,10 @@ class Flashcard(models.Model):
         fields: tuple[tuple[str, list[str] | str]] = ()
     ) -> str:
         """Slot flashcard data into a SVG template."""
+        assert isinstance(images, list) and isinstance(
+            images[0], WordImage
+        ), f"To template a flashcard a list of images is required; got {images}"
+
         templateFields = {"WORD_1": self.word.word}
         imageB64s = []
         for image in images:
@@ -51,8 +66,6 @@ class Flashcard(models.Model):
                 imageB64s.append(base64.b64encode(imageData.read()).decode("ascii"))
         imageB64s = [f"data:image/png;base64,{imageB64}" for imageB64 in imageB64s]
 
-        print("popcorns")
-        print(len(images))
         for fieldName, value in (
             ("WORD", self.word.word),
             ("PART_OF_SPEECH", self.word.partOfSpeech),

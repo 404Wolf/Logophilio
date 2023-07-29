@@ -167,3 +167,4 @@ STORAGES = {
 AWS_STORAGE_BUCKET_NAME = "logophilio"
 AWS_S3_REGION_NAME = "us-east-005"
 AWS_S3_ENDPOINT_URL = "https://s3.us-east-005.backblazeb2.com"
+AWS_LOCATION = "files/"
