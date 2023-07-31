@@ -1,10 +1,17 @@
-from base64 import b64decode
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
 from uuid import uuid1
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
+from django.db import connection
+import base64
 
+from .renderer.renderer import FlashcardRenderer
 from ..flashcards.models import Flashcard, FlashcardStyle
 from ..words.models import WordImageConfig, Word, WordImage
+
+imageGenLock = Lock()
 
 
 def generateImages(
@@ -26,10 +33,19 @@ def generateImages(
     ), f"Image generation requires a Word model instance; got {type(word)}"
     images = list(WordImage.objects.filter(word=word, config=imgConfig))
 
-    for i in range(count - len(images)):
+    def _createImage():
         image = WordImage.generated(word, imgConfig)
-        image.save()
-        images.append(image)
+        return image
+
+    imageCreators = []
+    with ThreadPoolExecutor() as executor:
+        for i in range(count - len(images)):
+            imageCreators.append(executor.submit(_createImage))
+        for imageCreator in as_completed(imageCreators):
+            image = imageCreator.result()
+            image.save()
+            assert image.word == word
+            images.append(image)
 
     return images
 
@@ -53,20 +69,18 @@ def generateFlashcard(
         word, Word
     ), f"Flashcard generation requires a Word model instance; got {type(word)}."
 
-    frontImgCount = style.imgCount("front")
     flashcard = Flashcard(
         word=word,
         style=style,
     )
 
-    renderedFront = b64decode(
-        flashcard.rendered(style.template("front"), images[:frontImgCount])
-    )
+    imageGenLock.acquire()
+    renderer = FlashcardRenderer(flashcard, images)
+    renderedFront = base64.b64decode(renderer.rendered("front"))
+    renderedBack = base64.b64decode(renderer.rendered("back"))
     flashcard.front = ContentFile(renderedFront, f"{str(uuid1())}.pdf")
-    renderedBack = b64decode(
-        flashcard.rendered(style.template("back"), images[frontImgCount:])
-    )
     flashcard.back = ContentFile(renderedBack, f"{str(uuid1())}.pdf")
+    imageGenLock.release()
 
     flashcard.save()
     return flashcard

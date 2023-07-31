@@ -1,5 +1,8 @@
 src/backend/keys.py
 src/backend/venv
+superuser.*
+keys.py
+.env
 
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm,jetbrains,python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm,jetbrains,python,visualstudiocode

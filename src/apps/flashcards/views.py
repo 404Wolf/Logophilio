@@ -1,5 +1,7 @@
+from concurrent.futures import ThreadPoolExecutor
 from copy import copy
 
+from django.db import connection
 from rest_framework.request import Request
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,8 +15,6 @@ from ..words.models import Word
 
 class Generate(APIView):
     def get(self, request: Request):
-        flashcards = []
-
         def _createFlashcard(wordStr: str, styleName: str):
             # Fetch the style of flashcard
             if isinstance(styleName, int):
@@ -24,8 +24,8 @@ class Generate(APIView):
 
             # Generate metadata for the vocab word that is having a flashcard generated
             try:
-                word = Word.objects.get(word=wordStr)
-            except ObjectDoesNotExist:
+                word = Word.objects.filter(word=wordStr)[0]
+            except IndexError:
                 word = Word.generated(wordStr)
                 word.save()
 
@@ -35,15 +35,26 @@ class Generate(APIView):
             # Generate the flashcard
             flashcard = generateFlashcard(word, style, images)
 
-            # Serialize the flashcard, store the json, and close the db connection
-            serialized_flashcard = {
-                "word": word.word,
+            # Close the database connection
+            connection.close()
+
+            return {
+                "word": wordStr,
                 "flashcard": FlashcardSerializer(flashcard).data,
             }
-            flashcards.append(serialized_flashcard)
 
-        for flashcardConfig in request.data["flashcards"]:
-            _createFlashcard(flashcardConfig["word"], flashcardConfig["style"])
+        flashcardCreators = []
+        with ThreadPoolExecutor() as executor:
+            for flashcardConfig in request.data["flashcards"]:
+                flashcardCreator = executor.submit(
+                    _createFlashcard, flashcardConfig["word"], flashcardConfig["style"]
+                )
+                flashcardCreators.append(flashcardCreator)
+            executor.shutdown(wait=True)
+
+            flashcards = []
+            for flashcardCreator in flashcardCreators:
+                flashcards.append(flashcardCreator.result())
 
         return Response({"flashcards": flashcards})
 

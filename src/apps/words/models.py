@@ -6,6 +6,7 @@ from uuid import uuid1
 
 import aiohttp
 import openai
+from asgiref.sync import async_to_sync
 from django.contrib.postgres.fields import ArrayField
 from django.core.files.base import ContentFile
 from django.db import models
@@ -37,11 +38,11 @@ class Word(models.Model):
 
     @classmethod
     def generated(cls, word: str, genKwargs: dict[str, dict[str, object]] = None):
-        async def _generate_word():
+        async def _generate_word(wordStr):
             async with aiohttp.ClientSession() as session:
                 async with asyncio.TaskGroup() as taskGroup:
-                    generator = WordDataGenerator(word, session)
-                    wordData = {"word": word}
+                    generator = WordDataGenerator(wordStr, session)
+                    wordData = {"word": wordStr}
                     for field in fields:
                         genMethod = getattr(generator, field)
                         if callable(genMethod):
@@ -52,7 +53,7 @@ class Word(models.Model):
                     wordData[field] = worker.result()
             return wordData
 
-        return cls(**asyncio.run(_generate_word()))
+        return cls(**async_to_sync(_generate_word)(word))
 
 
 class WordImage(models.Model):

@@ -1,6 +1,7 @@
-from asgiref.sync import sync_to_async
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+from django.db import connection
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,10 +13,13 @@ from .serializers import WordSerializer
 class Generate(APIView):
     def get(self, request: Request):
         words = []
-        for word in request.data["words"]:
-            word = Word.generated(word["word"])
-            word.save()
-            words.append(word)
+        wordCreators = []
+        with ThreadPoolExecutor() as executor:
+            for word in request.data["words"]:
+                wordCreators.append(executor.submit(Word.generated, word["word"]))
+            for wordCreator in as_completed(wordCreators):
+                words.append(wordCreator.result())
+
         words = [WordSerializer(word).data for word in words]
         return Response({"words": words})
 
@@ -28,5 +32,5 @@ class Listed(APIView):
 
 
 class Retrieve(RetrieveAPIView):
-    queryset=Word.objects.all()
+    queryset = Word.objects.all()
     serializer_class = WordSerializer

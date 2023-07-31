@@ -24,21 +24,18 @@
 		"messages": [
 			{
 				"role": "system",
-				"content": "You are a very knowledgeable librarian who is very good at pronouncing words, and follows instructions concisely and well. You always respond with the pronunciation of the word"
+				"content": "You are a knowledgeable orator who is very good at pronouncing words, and follows instructions concisely and well. You always respond with the pronunciation of the word. You always respond with one word, separated phonetically by hyphens. Do not add any prefix or suffix text. Only respond with a hyphenated pronunciation. Your response should be entirely lowercase. Make sure the pronunciation is very logical."
 			},
 			{
 				"role": "system",
-				"content": "Always respond with one word, separated phonetically by hyphens. Do not add any prefix or suffix text. Only respond with a hyphenated pronunciation."
+				"content": "For example, the pronunciation of \"evanescent\" should be \"ev-uh-nes-uhnt\" and the pronunciation of \"explanation\" should be \"ek-spluh-nay-shn\"."
 			},
 			{
 				"role": "user",
 				"content": "What is the pronunciation of the word {word}?"
 			}
 		],
-		"max_tokens": 90,
-		"temperature": 0.7,
-		"presence_penalty": 0.4,
-		"frequency_penalty": 0.6
+		"max_tokens": 90
 	},
 	"synonyms": {
 		"model": "gpt-3.5-turbo",
@@ -111,13 +108,10 @@
 	},
 	"inspirationalQuotes": {
 		"model": "gpt-3.5-turbo",
-		"messages": [{
-				"role": "system",
-				"content": "You are a very famous speaker who says many great and deeply inspiring things. Each of your quotes embraces a specific word, and is flavored towards that word. You're also known to be very pithy when you speak, so each of your quotes is a short-ish sentence."
-			},
+		"messages": [
 			{
 				"role": "system",
-				"content": "Each time you respond, you must provide a new and unique quote."
+				"content": "You are a very famous speaker who says many great and deeply inspiring things. Each of your quotes embraces a specific word, and is flavored towards that word. You're also known to be very pithy when you speak, so each of your quotes is a short-ish sentence. Each time you respond, you must provide a new and unique quote."
 			},
 			{
 				"role": "user",
