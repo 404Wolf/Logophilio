@@ -317,10 +317,15 @@ class WordDataGenerator:
     async def _genSynonyms(self, count: int):
         """Generate synonyms using GPT."""
         logger.debug("Generating synonyms using GPT.")
-        synonyms = await self._genTextField("synonyms", {"count": count})
-        synonyms = [synonym.strip() for synonym in synonyms.split("\n")]
-        synonyms = filter(lambda synonym: synonym != self.word, synonyms)
-        synonyms = map(lambda synonym: synonym.lower(), synonyms)
+        generated = await self._genTextField("synonyms", {"count": count})
+        synonyms = []
+        for synonym in generated.split("\n"):
+            if len(synonym) > 3:
+                synonym = synonym.lower()
+                if synonym[0] in string.digits:
+                    synonyms.append(synonym[3:])
+                else:
+                    synonyms.append(synonym)
         self._synonyms.extend(synonyms)
         logger.debug("Synonyms generated successfully.")
 
@@ -363,6 +368,7 @@ class WordDataGenerator:
         for i, sentence in enumerate(sentences):
             sentences[i] = sentence.strip()
         self._sentences.extend(sentences)
+        self._sentences = list(set(self._sentences))
         logger.debug("Sentences generated successfully.")
 
     async def _genPronunciation(self):
@@ -385,7 +391,7 @@ class WordDataGenerator:
         generated = await self._genTextField("inspirationalQuotes", {"count": count})
         quotes = []
         for quote in generated.split("\n"):
-            if len(quote) > 14:
+            if len(quote) > 20:
                 quote = re.search(r"([A-Z][a-z ]+)", quote).group()
                 quote = quote + "."
                 quotes.append(quote)

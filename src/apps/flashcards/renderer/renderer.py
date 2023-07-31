@@ -52,7 +52,7 @@ class FlashcardRenderer:
             images = images[frontImgCount:]
 
         word = self.word.word.title()
-        partOfSpeech = partOfSpeechAbbreviations[self.word.partOfSpeech]
+        partOfSpeech = self.word.partOfSpeech.title()
         pronunciation = startOutUpper(self.word.pronunciation.lower())
         offensive = str(self.word.offensive).lower()
         synonyms = [synonym.title() for synonym in self.word.synonyms]
