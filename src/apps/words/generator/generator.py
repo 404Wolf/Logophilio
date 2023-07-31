@@ -7,6 +7,7 @@ import string
 from contextlib import suppress
 from copy import copy, deepcopy
 
+from aiohttp import ContentTypeError
 from dotenv import load_dotenv
 
 import aiohttp
@@ -243,18 +244,19 @@ class WordDataGenerator:
             key: The API key for the specific thesaurus API.
         """
         logger.debug("Fetching data from the Webster thesaurus API.")
-        async with self.session.get(
-            f"{apiUrl}/{self.word}", params={"key": key}
-        ) as resp:
-            data = await resp.json()
-            synonyms = data[0]["meta"]["syns"]
-            if len(synonyms) > 0:
-                synonyms = [synonym.lower() for synonym in synonyms[0]]
-            antonyms = data[0]["meta"]["ants"]
-            if len(antonyms) > 0:
-                antonyms = [antonym.lower() for antonym in antonyms[0]]
-            self._synonyms.extend(synonyms)
-            self._antonyms.extend(antonyms)
+        with suppress(ContentTypeError, TypeError, IndexError):
+            async with self.session.get(
+                f"{apiUrl}/{self.word}", params={"key": key}
+            ) as resp:
+                data = await resp.json()
+                synonyms = data[0]["meta"]["syns"]
+                if len(synonyms) > 0:
+                    synonyms = [synonym.lower() for synonym in synonyms[0]]
+                antonyms = data[0]["meta"]["ants"]
+                if len(antonyms) > 0:
+                    antonyms = [antonym.lower() for antonym in antonyms[0]]
+                self._synonyms.extend(synonyms)
+                self._antonyms.extend(antonyms)
         logger.debug("Data from the Webster thesaurus API fetched successfully.")
 
     async def _fetchRhymezoneData(self):
@@ -289,26 +291,27 @@ class WordDataGenerator:
         sentences = []
         synonyms = []
         antonyms = []
-        async with self.session.get(f"{DICTIONARY_API}/{self.word}") as resp:
-            data = (await resp.json())[0]
-            if "origin" in data:
-                origin = data["origin"].lower()
-            partOfSpeech = data["meanings"][0]["partOfSpeech"].lower()
-            for entry in data["meanings"]:
-                for meaning in entry["definitions"]:
-                    definitions.append(meaning["definition"].lower())
-                    synonyms.extend(map(lambda item: item.lower(), meaning["synonyms"]))
-                    antonyms.extend(map(lambda item: item.lower(), meaning["antonyms"]))
-                    if "example" in meaning and len(meaning["example"].split(" ")) < 14:
-                        sentences.append(meaning["example"].lower())
-            if origin:
-                self._origin = origin
-            self._partOfSpeech = partOfSpeech
-            self._definitions.extend(definitions)
-            self._sentences.extend(sentences)
-            self._synonyms.extend(synonyms)
-            self._antonyms.extend(antonyms)
-            self._dictionary_api_fetched = True
+        with suppress(ContentTypeError, IndexError):
+            async with self.session.get(f"{DICTIONARY_API}/{self.word}") as resp:
+                data = (await resp.json())[0]
+                if "origin" in data:
+                    origin = data["origin"].lower()
+                partOfSpeech = data["meanings"][0]["partOfSpeech"].lower()
+                for entry in data["meanings"]:
+                    for meaning in entry["definitions"]:
+                        definitions.append(meaning["definition"].lower())
+                        synonyms.extend(map(lambda item: item.lower(), meaning["synonyms"]))
+                        antonyms.extend(map(lambda item: item.lower(), meaning["antonyms"]))
+                        if "example" in meaning and len(meaning["example"].split(" ")) < 14:
+                            sentences.append(meaning["example"].lower())
+                if origin:
+                    self._origin = origin
+                self._partOfSpeech = partOfSpeech
+                self._definitions.extend(definitions)
+                self._sentences.extend(sentences)
+                self._synonyms.extend(synonyms)
+                self._antonyms.extend(antonyms)
+                self._dictionary_api_fetched = True
         logger.debug("Data from the dictionary API fetched successfully.")
 
     async def _genSynonyms(self, count: int):

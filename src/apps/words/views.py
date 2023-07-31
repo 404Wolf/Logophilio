@@ -18,7 +18,9 @@ class Generate(APIView):
             for word in request.data["words"]:
                 wordCreators.append(executor.submit(Word.generated, word["word"]))
             for wordCreator in as_completed(wordCreators):
-                words.append(wordCreator.result())
+                word = wordCreator.result()
+                word.save()
+                words.append(word)
 
         words = [WordSerializer(word).data for word in words]
         return Response({"words": words})
