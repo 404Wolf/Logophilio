@@ -17,3 +17,5 @@ b2sdk
 Pillow
 adrf
 django-extensions
+celery
+django-celery-results

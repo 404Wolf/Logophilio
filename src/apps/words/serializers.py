@@ -5,13 +5,19 @@ from .models import (
 )
 
 
+class LimitedWordSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = WordModel
+        fields = ["id", "word"]
+
+
 class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = WordModel
-        fields = '__all__'
+        fields = "__all__"
 
 
 class WordImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = WordImageModel
-        fields = '__all__'
+        fields = "__all__"

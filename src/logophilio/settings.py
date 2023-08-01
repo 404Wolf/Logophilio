@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "apps.flashcards",
     "rest_framework",
     "django_extensions",
+    "django_celery_results"
 ]
 
 MIDDLEWARE = [
@@ -168,3 +169,20 @@ AWS_STORAGE_BUCKET_NAME = "logophilio"
 AWS_S3_REGION_NAME = "us-east-005"
 AWS_S3_ENDPOINT_URL = "https://s3.us-east-005.backblazeb2.com"
 AWS_LOCATION = "files/"
+
+
+# Django REST
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 25,
+}
+
+# Celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'Cache',
+    }
+}
